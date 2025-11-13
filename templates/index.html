@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Tracking URL Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .output-group {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .output-label {
+            margin-bottom: 10px;
+        }
+
+        .output-field {
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            word-break: break-all;
+            min-height: 60px;
+            color: #333;
+        }
+
+        .output-field.has-content {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            background: #4caf50;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        #utm_source_text_input {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DNS Tracking URL Generator</h1>
+        <p class="subtitle">Generate tracking URLs with UTM parameters for your marketing campaigns</p>
+        {% if test_mode %}
+        <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 10px; margin-bottom: 20px; color: #856404;">
+            <strong>🧪 TEST MODE ENABLED</strong> - Using mock data for development and testing
+        </div>
+        {% endif %}
+
+        <form id="urlForm">
+            <!-- Platform Selection -->
+            <div class="form-group">
+                <label for="platform">Platform <span class="required">*</span></label>
+                <select id="platform" name="platform" required>
+                    <option value="">Select Platform</option>
+                    <option value="Google Ads">Google Ads</option>
+                    <option value="Meta">Meta</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Email">Email</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <!-- UTM Source -->
+            <div class="form-group">
+                <label for="utm_source_category">UTM Source Category <span class="required">*</span></label>
+                <select id="utm_source_category" name="utm_source_category" required>
+                    <option value="">Select Category</option>
+                    <option value="Search Ads">Search Ads</option>
+                    <option value="Social Media">Social Media</option>
+                    <option value="Email / Newsletter">Email / Newsletter</option>
+                    <option value="Referral / Partner Sites">Referral / Partner Sites</option>
+                    <option value="Influencer / Organic Social">Influencer / Organic Social</option>
+                    <option value="Direct Mail or QR">Direct Mail or QR</option>
+                </select>
+            </div>
+
+            <!-- UTM Source Dropdown (for Search Ads, Social Media) -->
+            <div class="form-group hidden" id="utm_source_dropdown_group">
+                <label for="utm_source_dropdown">UTM Source <span class="required">*</span></label>
+                <select id="utm_source_dropdown" name="utm_source_dropdown">
+                    <option value="">Select Source</option>
+                </select>
+            </div>
+
+            <!-- UTM Source Text Input (for Referral, Influencer, Direct Mail) -->
+            <div class="form-group hidden" id="utm_source_text_group">
+                <label for="utm_source_text">UTM Source <span class="required">*</span></label>
+                <input type="text" id="utm_source_text" name="utm_source_text" 
+                       placeholder="Enter source name">
+            </div>
+
+            <!-- Hidden field for final utm_source value -->
+            <input type="hidden" id="utm_source" name="utm_source">
+
+            <!-- UTM Medium -->
+            <div class="form-group">
+                <label for="utm_medium">UTM Medium <span class="required">*</span></label>
+                <select id="utm_medium" name="utm_medium" required>
+                    <option value="">Select Medium</option>
+                    {% for medium in utm_mediums %}
+                    <option value="{{ medium }}">{{ medium }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Campaign Name -->
+            <div class="form-group">
+                <label for="campaign_name">Campaign Name</label>
+                <input type="text" id="campaign_name" name="campaign_name" 
+                       placeholder="Enter campaign name (or leave empty for 'unknown' if not using dynamic)">
+            </div>
+
+            <!-- Ad Name -->
+            <div class="form-group">
+                <label for="ad_name">Ad Name</label>
+                <input type="text" id="ad_name" name="ad_name" 
+                       placeholder="Enter ad name (or leave empty for 'unknown' if not using dynamic)">
+            </div>
+
+            <!-- Ad Set Name -->
+            <div class="form-group">
+                <label for="adset_name">Ad Set Name (Optional)</label>
+                <input type="text" id="adset_name" name="adset_name" 
+                       placeholder="Enter ad set name (for utm_term)">
+            </div>
+
+            <!-- Dynamic Placeholders Checkbox -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="use_dynamic_placeholders" name="use_dynamic_placeholders">
+                <label for="use_dynamic_placeholders">
+                    Include Dynamic Placeholders 
+                    {% if test_mode and mock_data.example_placeholders %}
+                        ({{ mock_data.example_placeholders.campaign.name }}, {{ mock_data.example_placeholders.ad.name }}, etc.)
+                    {% else %}
+                        ({{ "{{" }}campaign.name{{ "}}" }}, {{ "{{" }}ad.name{{ "}}" }}, etc.)
+                    {% endif %}
+                </label>
+            </div>
+
+            <!-- Generate Button -->
+            <button type="submit" class="btn">Generate URL</button>
+
+            <!-- Error Messages -->
+            <div id="errorMessages"></div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden success-message"></div>
+        </form>
+
+        <!-- Output Section -->
+        <div class="output-group">
+            <label class="output-label">Generated URL (UTM Only):</label>
+            <div id="outputField" class="output-field">Generated URL will appear here...</div>
+            <button type="button" class="btn copy-btn hidden" id="copyBtn">Copy URL</button>
+            
+            {% if test_mode %}
+            <!-- Preview Full URL (Test Mode Only) -->
+            <div id="previewSection" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <label class="output-label">Preview Full URL (with platform parameters):</label>
+                <div id="previewField" class="output-field" style="background: #e3f2fd; border-color: #2196f3;">Full URL preview will appear here...</div>
+                <button type="button" class="btn copy-btn" id="previewCopyBtn" style="background: #2196f3; margin-top: 10px;">Copy Full URL</button>
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                    This preview shows what the URL would look like when it arrives at your site, including platform-specific parameters (gclid, fbclid, etc.)
+                </p>
+            </div>
+            <button type="button" class="btn hidden" id="previewBtn" style="background: #2196f3; margin-top: 10px;">Preview Full URL (Test Mode)</button>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // UTM Source configuration
+        const utmSources = {{ utm_sources | tojson }};
+
+        // Track if user has manually edited utm_source and utm_medium
+        let utmSourceEdited = false;
+        let utmMediumEdited = false;
+
+        // Platform selection handler
+        document.getElementById('platform').addEventListener('change', function() {
+            const platform = this.value;
+            if (platform) {
+                fetch('/api/platform-suggestion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ platform: platform })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && !utmSourceEdited) {
+                        // Auto-select the suggested utm_source
+                        const suggestion = data.utm_source;
+                        // Try to find and select it in the category dropdowns
+                        selectUtmSourceByValue(suggestion);
+                    }
+                    if (data.success && !utmMediumEdited) {
+                        document.getElementById('utm_medium').value = data.utm_medium;
+                    }
+                });
+            }
+        });
+
+        // UTM Source Category handler
+        document.getElementById('utm_source_category').addEventListener('change', function() {
+            const category = this.value;
+            const dropdownGroup = document.getElementById('utm_source_dropdown_group');
+            const textGroup = document.getElementById('utm_source_text_group');
+            const dropdown = document.getElementById('utm_source_dropdown');
+            const textInput = document.getElementById('utm_source_text');
+
+            // Hide both initially
+            dropdownGroup.classList.add('hidden');
+            textGroup.classList.add('hidden');
+            dropdown.value = '';
+            textInput.value = '';
+
+            if (!category) return;
+
+            const categoryData = utmSources[category];
+            if (categoryData) {
+                if (categoryData.type === 'dropdown') {
+                    // Populate dropdown
+                    dropdown.innerHTML = '<option value="">Select Source</option>';
+                    categoryData.options.forEach(option => {
+                        const opt = document.createElement('option');
+                        opt.value = option;
+                        opt.textContent = option;
+                        dropdown.appendChild(opt);
+                    });
+                    dropdownGroup.classList.remove('hidden');
+                    // Auto-select if only one option (e.g., Email / Newsletter)
+                    if (categoryData.options.length === 1) {
+                        dropdown.value = categoryData.options[0];
+                        document.getElementById('utm_source').value = categoryData.options[0];
+                        utmSourceEdited = true;
+                    }
+                } else if (categoryData.type === 'text_input') {
+                    // Show text input
+                    textInput.placeholder = categoryData.placeholder || 'Enter source name';
+                    textGroup.classList.remove('hidden');
+                }
+            }
+        });
+
+        // UTM Source dropdown handler
+        document.getElementById('utm_source_dropdown').addEventListener('change', function() {
+            document.getElementById('utm_source').value = this.value;
+            utmSourceEdited = true;
+        });
+
+        // UTM Source text input handler
+        document.getElementById('utm_source_text').addEventListener('input', function() {
+            document.getElementById('utm_source').value = this.value;
+            utmSourceEdited = true;
+        });
+
+        // UTM Medium handler
+        document.getElementById('utm_medium').addEventListener('change', function() {
+            utmMediumEdited = true;
+        });
+
+        // Helper function to select UTM source by value
+        function selectUtmSourceByValue(value) {
+            // Check each category
+            for (const [category, categoryData] of Object.entries(utmSources)) {
+                if (categoryData.type === 'dropdown' && categoryData.options.includes(value)) {
+                    // Select the category
+                    document.getElementById('utm_source_category').value = category;
+                    // Trigger change to show dropdown
+                    document.getElementById('utm_source_category').dispatchEvent(new Event('change'));
+                    // Select the value in dropdown
+                    setTimeout(() => {
+                        document.getElementById('utm_source_dropdown').value = value;
+                        document.getElementById('utm_source_dropdown').dispatchEvent(new Event('change'));
+                    }, 10);
+                    return;
+                }
+            }
+        }
+
+        // Form submission handler
+        document.getElementById('urlForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get final utm_source value
+            const utmSourceDropdown = document.getElementById('utm_source_dropdown');
+            const utmSourceText = document.getElementById('utm_source_text');
+            const utmSource = utmSourceDropdown.value || utmSourceText.value;
+
+            // Validate utm_source
+            if (!utmSource) {
+                showError('Please select or enter a UTM source');
+                return;
+            }
+
+            // Collect form data
+            const formData = {
+                platform: document.getElementById('platform').value,
+                utm_source: utmSource,
+                utm_medium: document.getElementById('utm_medium').value,
+                campaign_name: document.getElementById('campaign_name').value,
+                ad_name: document.getElementById('ad_name').value,
+                adset_name: document.getElementById('adset_name').value,
+                use_dynamic_placeholders: document.getElementById('use_dynamic_placeholders').checked
+            };
+
+            // Validate required fields
+            if (!formData.platform) {
+                showError('Please select a platform');
+                return;
+            }
+            if (!formData.utm_medium) {
+                showError('Please select a UTM medium');
+                return;
+            }
+
+            // Clear previous errors
+            clearErrors();
+
+            // Generate URL
+            fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayUrl(data.url);
+                    showSuccess('URL generated successfully!');
+                } else {
+                    if (data.errors) {
+                        showErrors(data.errors);
+                    } else {
+                        showError(data.error || 'Failed to generate URL');
+                    }
+                }
+            })
+            .catch(error => {
+                showError('An error occurred: ' + error.message);
+            });
+        });
+
+        // Display generated URL
+        function displayUrl(url) {
+            const outputField = document.getElementById('outputField');
+            outputField.textContent = url;
+            outputField.classList.add('has-content');
+            document.getElementById('copyBtn').classList.remove('hidden');
+            
+            // Show preview button if in test mode
+            {% if test_mode %}
+            const previewBtn = document.getElementById('previewBtn');
+            if (previewBtn) {
+                previewBtn.classList.remove('hidden');
+            }
+            {% endif %}
+        }
+
+        // Copy URL to clipboard
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const url = document.getElementById('outputField').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#4caf50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#4caf50';
+                }, 2000);
+            });
+        });
+
+        // Error handling
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessages');
+            errorDiv.innerHTML = '<div class="error">' + message + '</div>';
+        }
+
+        function showErrors(errors) {
+            const errorDiv = document.getElementById('errorMessages');
+            let html = '';
+            for (const [field, message] of Object.entries(errors)) {
+                html += '<div class="error">' + field + ': ' + message + '</div>';
+            }
+            errorDiv.innerHTML = html;
+        }
+
+        function clearErrors() {
+            document.getElementById('errorMessages').innerHTML = '';
+            document.getElementById('successMessage').classList.add('hidden');
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.remove('hidden');
+        }
+
+        // Preview Full URL (Test Mode Only)
+        {% if test_mode %}
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            // Get form data
+            const utmSourceDropdown = document.getElementById('utm_source_dropdown');
+            const utmSourceText = document.getElementById('utm_source_text');
+            const utmSource = utmSourceDropdown.value || utmSourceText.value;
+
+            if (!utmSource) {
+                showError('Please select or enter a UTM source first');
+                return;
+            }
+
+            const formData = {
+                platform: document.getElementById('platform').value,
+                utm_source: utmSource,
+                utm_medium: document.getElementById('utm_medium').value,
+                campaign_name: document.getElementById('campaign_name').value,
+                ad_name: document.getElementById('ad_name').value,
+                adset_name: document.getElementById('adset_name').value,
+                use_dynamic_placeholders: document.getElementById('use_dynamic_placeholders').checked
+            };
+
+            if (!formData.platform || !formData.utm_medium) {
+                showError('Please fill in all required fields first');
+                return;
+            }
+
+            // Show loading state
+            const previewField = document.getElementById('previewField');
+            previewField.textContent = 'Generating preview...';
+
+            fetch('/api/preview-full-url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    previewField.textContent = data.full_url;
+                    previewField.classList.add('has-content');
+                    document.getElementById('previewSection').classList.remove('hidden');
+                } else {
+                    previewField.textContent = 'Error: ' + (data.error || 'Failed to generate preview');
+                }
+            })
+            .catch(error => {
+                previewField.textContent = 'Error: ' + error.message;
+            });
+        });
+
+        // Copy preview URL to clipboard
+        document.getElementById('previewCopyBtn').addEventListener('click', function() {
+            const url = document.getElementById('previewField').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = this;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#4caf50';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#2196f3';
+                }, 2000);
+            });
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
+

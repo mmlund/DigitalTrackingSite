@@ -1,0 +1,29 @@
+{
+  "utm_sources": {
+    "Search Ads": {
+      "type": "dropdown",
+      "options": ["google", "bing"]
+    },
+    "Social Media": {
+      "type": "dropdown",
+      "options": ["facebook", "instagram", "tiktok", "linkedin", "twitter", "youtube"]
+    },
+    "Email / Newsletter": {
+      "type": "dropdown",
+      "options": ["email"]
+    },
+    "Referral / Partner Sites": {
+      "type": "text_input",
+      "placeholder": "Enter partner site name"
+    },
+    "Influencer / Organic Social": {
+      "type": "text_input",
+      "placeholder": "Enter influencer/platform name"
+    },
+    "Direct Mail or QR": {
+      "type": "text_input",
+      "placeholder": "Enter source name (e.g., qrposter)"
+    }
+  }
+}
+

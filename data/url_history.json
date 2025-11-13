@@ -1,0 +1,16 @@
+{
+  "url_history": [
+    {
+      "id": "0433b479-a599-422f-af42-52c57a9a7b84",
+      "timestamp": "2025-11-12T12:30:28.245601",
+      "platform": "Google Ads",
+      "utm_source": "google",
+      "utm_medium": "paid_search",
+      "campaign_name": "First test DNS",
+      "ad_name": "Awareness1",
+      "adset_name": "",
+      "use_dynamic_placeholders": true,
+      "generated_url": "http://dnstrainer.com/landing?utm_source=google&utm_medium=paid_search&utm_campaign=%7B%7Bcampaign.name%7D%7D&utm_content=%7B%7Bad.name%7D%7D"
+    }
+  ]
+}
