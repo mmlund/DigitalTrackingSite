@@ -187,6 +187,22 @@ def process_tracking_event():
         
         # Additional
         "platform_detected": platform_detected,
+        
+        # Behavioral & Pathway Data
+        "event_type": params.get("event_type", "page_view"),
+        "current_page": params.get("current_page"),
+        "previous_page": params.get("previous_page"),
+        "sequence_step": params.get("sequence_step"),
+        "element_tag": params.get("element_tag"),
+        "element_id": params.get("element_id"),
+        "element_class": params.get("element_class"),
+        "element_text": params.get("element_text"),
+        "target_url": params.get("target_url"),
+        
+        # Technical Data
+        "screen_resolution": params.get("screen_resolution"),
+        "language": params.get("language"),
+        
         "raw_params": params  # Store all params as dict for flexibility
     }
     

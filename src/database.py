@@ -183,9 +183,101 @@ def count_events(filter_dict=None):
     return collection.count_documents(filter_dict)
 
 
+# Mock Database for testing/fallback
+class MockDatabase:
+    def __init__(self):
+        self.data = {}
+        self.indexes = {}
+
+    def insert_one(self, document):
+        if "_id" not in document:
+            document["_id"] = str(uuid.uuid4())
+        
+        # Simulating collection name 'raw_events'
+        if "raw_events" not in self.data:
+            self.data["raw_events"] = []
+        
+        self.data["raw_events"].append(document)
+        
+        # Save to file for persistence in test mode
+        try:
+            with open("data/mock_db_events.json", "w") as f:
+                # Convert datetime to str for JSON
+                json_data = []
+                for doc in self.data["raw_events"]:
+                    doc_copy = doc.copy()
+                    if isinstance(doc_copy.get("timestamp"), datetime):
+                        doc_copy["timestamp"] = doc_copy["timestamp"].isoformat()
+                    if isinstance(doc_copy.get("created_at"), datetime):
+                        doc_copy["created_at"] = doc_copy["created_at"].isoformat()
+                    json_data.append(doc_copy)
+                json.dump(json_data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to save mock DB: {e}")
+            
+        return MagicMock(inserted_id=document["_id"])
+
+    def find(self, filter_dict=None):
+        # Simple mock find - returns all or filters by equality
+        results = []
+        events = self.data.get("raw_events", [])
+        
+        if not filter_dict:
+            results = events
+        else:
+            for event in events:
+                match = True
+                for k, v in filter_dict.items():
+                    if k not in event or event[k] != v:
+                        match = False
+                        break
+                if match:
+                    results.append(event)
+        
+        # Return a mock cursor
+        cursor = MagicMock()
+        cursor.sort = MagicMock(return_value=cursor)
+        cursor.skip = MagicMock(return_value=cursor)
+        cursor.limit = MagicMock(return_value=results) # Simplified: limit returns the list
+        cursor.__iter__ = MagicMock(return_value=iter(results))
+        return cursor
+
+    def count_documents(self, filter_dict=None):
+        cursor = self.find(filter_dict)
+        return len(list(cursor))
+
+    def distinct(self, field):
+        events = self.data.get("raw_events", [])
+        return list(set(e.get(field) for e in events if field in e))
+
+    def create_index(self, keys):
+        pass
+
+import uuid
+import json
+from unittest.mock import MagicMock
+
+_mock_db = MockDatabase()
+
+def get_collection(collection_name="raw_events"):
+    """Get collection instance (or mock)."""
+    global _client, _db
+    
+    try:
+        # Try to get real DB
+        if _db is None:
+            get_database()
+        return _db[collection_name]
+    except:
+        # Fallback to mock
+        logger.warning("Using Mock Database")
+        return _mock_db
+
+
 def get_unique_values(field):
     """Get unique values for a field (for filter dropdowns)."""
     collection = get_collection()
     
     return collection.distinct(field)
+
 

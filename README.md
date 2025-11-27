@@ -1,3 +1,42 @@
+This repository contains the files for backend tracking for varions websites. Although the first installation os for the sie dnstrainer.com and scnadinavianclinic.com it will be set-up to manage the expansion to handle back-end tracking for several websites.
+
+The general idea is to first generate tracking urls for all marketing avenues i.e. Google ads, FB, Instagram, Tik-Tok, Youtube, emails, social media posts etc. This is the first step: DNS tracking URL generator.
+
+All entries, home page and landing pages will capture these urls and the information contained in them (the tracking information) and store in a database (MongoDB JSON)
+
+This is done trough calling an API that we will create in this project. The API call will be triggered by EACH WEBSITE.
+
+We will also collect additional data on the usage from the website i.e. time spent on page, number of pages visited, scroll depth, CTA etc. This data will be stored in a database (MongoDB JSON)that we will connect to in this project. Data will also be stored for conversions i.e. appointments booked, value of sale etc.as well as customer information (email, phone number, name etc.).
+
+In a seperate, but connected database we will collect information abouth the particular environment of relevance to the marketing for each company.This will include information such as competitors, competitors actions, market trends, customer feedback, social media activity etc. This data will be collected from public sources and APIs as well as scraping of social media platforms.
+
+All this data collected will be made available to the user for tracking and analysis using an LLM (Large Language Model). The user will then be able to ask any questions related to the marketing for this company such as trends, success rate of campaigns, types of users, customer journey etc., using the LLM and the data.
+The LLm will have access to tools such as calculator, code-generator, charting capabilities etc. The system will have a dashbord for a quick overview of the marketing for the company.
+
+In a later step this will be connected to a campaign generator that will generate suggestions for newletters, ads, social media content, videos etc based on the data collected. The system will eventually be able to generate and implement suggestions for marketing campaigns and even post this automatically after review by the user.
+
+The LLM will have acces to the data collected as well asThe flow works as follows:
+1. NOW-Generate urls for marketing campaigns
+2. NOW -Collect and process urls when people land on pages
+3. NOW -Collect more data on usage from the website
+4. NOW -Collect CTA, $ value and other data as well as customer information (email, phone number, name etc.)
+5. NOW Store collected data in an optimal format - this may be RAG type
+6. NOW Enable dashboard for quick overview of marketing for the company
+7. NOWEnable LLM for analysis of marketing data
+8. LATER -enable campaign generator for suggestions for newletters, ads, social media content, videos etc based on the data collectedEna
+9. LATER -Automate postings and campaingns
+10. LATER -measure performance of marketing campaigns
+11. LATER -Self-reflectiona and improvement of marketing campaigns
+
+ABOUT DEVELOPMENT
+
+The system will be developed using Python and Flask. The database will be MongoDB. The LLM SHOULD BE FLEXIBLE AND NOT HARD CODED TO A SPECIFIC LLM. 
+The system will be hosted on Render and will be accessible from the website. 
+To ensure a smooth deployment prioritize simplicity in the code and deployment process. I am inexperiences in this aspects and not a technician. I need detailed instructions and explanations. 
+Ask questions if something is not clear in particular before critical operations are performed.
+
+tHE SYSTEM WILL BE HOSTED ON RENDER AND WILL BE ACCESSIBLE FROM THE WEBSITE
+
 # DNS Tracking URL Generator
 
 Phase 1 of the DNS Marketing Tracking System - URL Generator Module
