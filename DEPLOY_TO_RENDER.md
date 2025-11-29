@@ -20,6 +20,21 @@ This guide explains how to deploy your application to Render using the newly cre
     *   **SECRET_KEY**: Render will generate a secure one for you automatically.
 7.  Click **Apply**.
 
+## Enabling Auto-Domain Detection (Subdomains)
+
+To separate data by subdomain (e.g., `client1.dnstrainer.com`, `client2.dnstrainer.com`):
+
+1.  After deployment, go to your **Service Settings** in Render.
+2.  Find the **Custom Domains** section.
+3.  Add a **Wildcard Domain**: `*.yourdomain.com` (e.g., `*.dnstrainer.com`).
+4.  Configure your DNS provider (GoDaddy, Namecheap, etc.) to point `*` (CNAME or A record) to your Render app.
+5.  **That's it!** The application is now updated to automatically detect and store:
+    *   `host`: The full hostname (e.g., `client1.dnstrainer.com`)
+    *   `subdomain`: The first part (e.g., `client1`)
+    *   `domain`: The root domain (e.g., `dnstrainer.com`)
+
+You can then filter your data in MongoDB using the `subdomain` field.
+
 ## What `render.yaml` Does
 
 *   **Type**: Web Service

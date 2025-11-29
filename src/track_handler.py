@@ -203,7 +203,12 @@ def process_tracking_event():
         "screen_resolution": params.get("screen_resolution"),
         "language": params.get("language"),
         
-        "raw_params": params  # Store all params as dict for flexibility
+        "raw_params": params,  # Store all params as dict for flexibility
+        
+        # Domain & Host Data (Auto-detected)
+        "host": request.host,
+        "domain": ".".join(request.host.split(".")[-2:]) if request.host.count(".") > 1 else request.host,
+        "subdomain": request.host.split(".")[0] if request.host.count(".") > 1 else "www"
     }
     
     # Remove None values to keep database clean
