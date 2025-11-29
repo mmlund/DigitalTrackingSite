@@ -22,6 +22,13 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change in production
     
+    # Enable CORS for specific domains
+    from flask_cors import CORS
+    CORS(app, resources={
+        r"/track": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", "https://*.dnstrainer.com"]},
+        r"/api/*": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", "https://*.dnstrainer.com"]}
+    })
+    
     # Register Blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(tracking_bp)
