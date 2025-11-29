@@ -1,0 +1,32 @@
+{
+  "conversations": [
+    {
+      "customer_id": "C789",
+      "text": "Hello, I would like to know more about your services. Sure, we offer...",
+      "summary": "Summary of: Hello, I would like to know more about your servic...",
+      "created_at": "2025-11-27T19:21:19.329968",
+      "_id": "a643c48f-5ea2-4780-817e-f9b7c083d9c9"
+    }
+  ],
+  "surveys": [
+    {
+      "email": "test@example.com",
+      "type": "feedback",
+      "status": "sent",
+      "triggered_at": "2025-11-27T19:21:23.387492",
+      "_id": "63c0efc1-d51d-4f27-b1fd-08841a70f987"
+    }
+  ],
+  "therapist_ratings": [
+    {
+      "therapist_id": "T123",
+      "patient_id": "P456",
+      "rating": 5,
+      "relevance_score": null,
+      "notes": "Great session",
+      "date": "2025-11-27",
+      "created_at": "2025-11-27T19:21:27.436228",
+      "_id": "7dfcd404-3f29-4de8-bed7-ac29f782f01d"
+    }
+  ]
+}

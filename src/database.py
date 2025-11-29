@@ -24,10 +24,11 @@ def get_client():
             raise ValueError("MONGODB_URI not set in environment variables")
         
         try:
-            # Replace <db_password> placeholder if still present
-            uri = MONGODB_URI.replace("<db_password>", "")
-            if "<db_password>" in uri:
+            if "<db_password>" in MONGODB_URI:
                 raise ValueError("Please replace <db_password> in MONGODB_URI with your actual password")
+            
+            # Replace <db_password> placeholder if still present (though the check above should catch it)
+            uri = MONGODB_URI.replace("<db_password>", "")
             
             _client = MongoClient(
                 uri,
@@ -184,43 +185,26 @@ def count_events(filter_dict=None):
 
 
 # Mock Database for testing/fallback
-class MockDatabase:
-    def __init__(self):
-        self.data = {}
-        self.indexes = {}
+class MockCollection:
+    def __init__(self, name, db):
+        self.name = name
+        self.db = db
 
     def insert_one(self, document):
         if "_id" not in document:
             document["_id"] = str(uuid.uuid4())
         
-        # Simulating collection name 'raw_events'
-        if "raw_events" not in self.data:
-            self.data["raw_events"] = []
+        if self.name not in self.db.data:
+            self.db.data[self.name] = []
         
-        self.data["raw_events"].append(document)
-        
-        # Save to file for persistence in test mode
-        try:
-            with open("data/mock_db_events.json", "w") as f:
-                # Convert datetime to str for JSON
-                json_data = []
-                for doc in self.data["raw_events"]:
-                    doc_copy = doc.copy()
-                    if isinstance(doc_copy.get("timestamp"), datetime):
-                        doc_copy["timestamp"] = doc_copy["timestamp"].isoformat()
-                    if isinstance(doc_copy.get("created_at"), datetime):
-                        doc_copy["created_at"] = doc_copy["created_at"].isoformat()
-                    json_data.append(doc_copy)
-                json.dump(json_data, f, indent=2)
-        except Exception as e:
-            logger.warning(f"Failed to save mock DB: {e}")
+        self.db.data[self.name].append(document)
+        self.db._save()
             
         return MagicMock(inserted_id=document["_id"])
 
     def find(self, filter_dict=None):
-        # Simple mock find - returns all or filters by equality
         results = []
-        events = self.data.get("raw_events", [])
+        events = self.db.data.get(self.name, [])
         
         if not filter_dict:
             results = events
@@ -234,11 +218,10 @@ class MockDatabase:
                 if match:
                     results.append(event)
         
-        # Return a mock cursor
         cursor = MagicMock()
         cursor.sort = MagicMock(return_value=cursor)
         cursor.skip = MagicMock(return_value=cursor)
-        cursor.limit = MagicMock(return_value=results) # Simplified: limit returns the list
+        cursor.limit = MagicMock(return_value=results)
         cursor.__iter__ = MagicMock(return_value=iter(results))
         return cursor
 
@@ -247,11 +230,39 @@ class MockDatabase:
         return len(list(cursor))
 
     def distinct(self, field):
-        events = self.data.get("raw_events", [])
+        events = self.db.data.get(self.name, [])
         return list(set(e.get(field) for e in events if field in e))
 
     def create_index(self, keys):
         pass
+
+class MockDatabase:
+    def __init__(self):
+        self.data = {}
+        self.collections = {}
+
+    def __getitem__(self, name):
+        if name not in self.collections:
+            self.collections[name] = MockCollection(name, self)
+        return self.collections[name]
+
+    def _save(self):
+        # Save to file for persistence in test mode
+        try:
+            with open("data/mock_db.json", "w") as f:
+                # Convert datetime to str for JSON
+                json_data = {}
+                for col_name, docs in self.data.items():
+                    json_data[col_name] = []
+                    for doc in docs:
+                        doc_copy = doc.copy()
+                        for k, v in doc_copy.items():
+                            if isinstance(v, datetime):
+                                doc_copy[k] = v.isoformat()
+                        json_data[col_name].append(doc_copy)
+                json.dump(json_data, f, indent=2)
+        except Exception as e:
+            logger.warning(f"Failed to save mock DB: {e}")
 
 import uuid
 import json
@@ -270,8 +281,8 @@ def get_collection(collection_name="raw_events"):
         return _db[collection_name]
     except:
         # Fallback to mock
-        logger.warning("Using Mock Database")
-        return _mock_db
+        logger.warning(f"Using Mock Database for collection: {collection_name}")
+        return _mock_db[collection_name]
 
 
 def get_unique_values(field):

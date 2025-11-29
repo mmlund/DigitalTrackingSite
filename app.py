@@ -14,6 +14,9 @@ from src.blueprints.tracking import tracking_bp
 from src.blueprints.dashboard import dashboard_bp
 from src.blueprints.api import api_bp
 from src.blueprints.analysis import analysis_bp
+from src.modules.therapist import therapist_bp
+from src.modules.surveys import surveys_bp
+from src.modules.conversations import conversations_bp
 
 def create_app():
     app = Flask(__name__)
@@ -25,6 +28,9 @@ def create_app():
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(analysis_bp)
+    app.register_blueprint(therapist_bp)
+    app.register_blueprint(surveys_bp)
+    app.register_blueprint(conversations_bp)
     
     return app
 

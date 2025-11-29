@@ -70,5 +70,8 @@ def is_test_mode():
 
 # MongoDB Configuration
 MONGODB_URI = os.getenv("MONGODB_URI", "")
-MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "dns_tracking")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "DNStrainerDB")
+
+# OpenAI Configuration
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 

@@ -174,6 +174,14 @@ DNStracking/
 
 ## Configuration
 
+### Environment Variables
+Create a `.env` file in the project root to manage sensitive credentials.
+```
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority
+OPENAI_API_KEY=sk-...
+TEST_MODE=True
+```
+
 ### UTM Sources
 Edit `data/utm_sources.json` to modify source categories and options.
 
@@ -295,10 +303,20 @@ Each scenario includes realistic parameter formats matching real platform behavi
 
 ## Next Steps (Future Phases)
 
-- Phase 2: Parameter capture script for landing pages
-- Phase 3: Tracking API and database storage
-- Phase 4: ETL layer and analytics
-- Phase 5: LLM analysis and optimization
+- **Phase 2: Data Collection & Tracking**
+    - Capture parameters on landing pages
+    - Track user behavior (time on page, scroll depth, clicks)
+    - **Conversation Tracking**: Record, transcribe, and summarize customer chats/calls (via OpenAI)
+- **Phase 3: Therapist Tools (dnstrainer.com)**
+    - Daily rating system for therapists
+    - Patient relevance scoring
+- **Phase 4: Marketing & CRM Integration**
+    - **Survey System**: Trigger automated surveys via email
+    - **Ad Platform Integration**: Connect Google Ads/Facebook APIs for data enrichment
+    - **CRM Lite**: Aggregate customer data for marketing analysis
+- **Phase 5: Analytics & AI**
+    - LLM-driven analysis of marketing data
+    - Campaign generation suggestions
 
 ## License
 

@@ -20,9 +20,9 @@ def test_track_endpoint():
     # Check if server is running
     try:
         response = requests.get("http://localhost:5000/", timeout=2)
-        print("✅ Flask server is running")
+        print("Flask server is running")
     except:
-        print("❌ Flask server is not running!")
+        print("[FAIL] Flask server is not running!")
         print("   Please start the server with: python app.py")
         return False
     
@@ -48,11 +48,11 @@ def test_track_endpoint():
         print(f"Status Code: {response.status_code}")
         print(f"Response: {json.dumps(response.json(), indent=2)}")
         if response.status_code == 200:
-            print("✅ Test 1 PASSED")
+            print("[PASS] Test 1 PASSED")
         else:
-            print("❌ Test 1 FAILED")
+            print("[FAIL] Test 1 FAILED")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
     
     print()
     print("-" * 70)
@@ -74,11 +74,11 @@ def test_track_endpoint():
         print(f"Status Code: {response.status_code}")
         print(f"Response: {json.dumps(response.json(), indent=2)}")
         if response.status_code == 200:
-            print("✅ Test 2 PASSED")
+            print("[PASS] Test 2 PASSED")
         else:
-            print("❌ Test 2 FAILED")
+            print("[FAIL] Test 2 FAILED")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
     
     print()
     print("-" * 70)
@@ -106,11 +106,11 @@ def test_track_endpoint():
         print(f"Status Code: {response.status_code}")
         print(f"Response: {json.dumps(response.json(), indent=2)}")
         if response.status_code == 200:
-            print("✅ Test 3 PASSED")
+            print("[PASS] Test 3 PASSED")
         else:
-            print("❌ Test 3 FAILED")
+            print("[FAIL] Test 3 FAILED")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
     
     print()
     print("-" * 70)
@@ -127,11 +127,11 @@ def test_track_endpoint():
         print(f"Status Code: {response.status_code}")
         print(f"Response: {json.dumps(response.json(), indent=2)}")
         if response.status_code == 400:
-            print("✅ Test 4 PASSED (Correctly rejected invalid request)")
+            print("[PASS] Test 4 PASSED (Correctly rejected invalid request)")
         else:
-            print("❌ Test 4 FAILED (Should return 400)")
+            print("[FAIL] Test 4 FAILED (Should return 400)")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
     
     print()
     print("-" * 70)
@@ -152,11 +152,11 @@ def test_track_endpoint():
         print(f"Status Code: {response.status_code}")
         print(f"Response: {json.dumps(response.json(), indent=2)}")
         if response.status_code == 200:
-            print("✅ Test 5 PASSED")
+            print("[PASS] Test 5 PASSED")
         else:
-            print("❌ Test 5 FAILED")
+            print("[FAIL] Test 5 FAILED")
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
     
     print()
     print("=" * 70)
