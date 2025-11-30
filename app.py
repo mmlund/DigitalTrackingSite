@@ -28,8 +28,28 @@ def create_app():
     # Enable CORS for specific domains
     from flask_cors import CORS
     CORS(app, resources={
-        r"/track": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", re.compile(r"^https://.*\.dnstrainer\.com$")]},
-        r"/api/*": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", re.compile(r"^https://.*\.dnstrainer\.com$")]}
+        r"/track": {
+            "origins": [
+                "https://dnstrainer.com", 
+                "https://booking.dnstrainer.com", 
+                "http://localhost:5000",
+                re.compile(r"^https://.*\.dnstrainer\.com$")
+            ],
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type"],
+            "supports_credentials": False
+        },
+        r"/api/*": {
+            "origins": [
+                "https://dnstrainer.com", 
+                "https://booking.dnstrainer.com", 
+                "http://localhost:5000",
+                re.compile(r"^https://.*\.dnstrainer\.com$")
+            ],
+            "methods": ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+            "allow_headers": ["Content-Type"],
+            "supports_credentials": False
+        }
     })
     
     # Register Blueprints

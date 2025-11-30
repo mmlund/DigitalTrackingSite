@@ -7,7 +7,7 @@
     'use strict';
 
     const CONFIG = {
-        endpoint: '/track',
+        endpoint: 'https://dnstracking.onrender.com/track',
         sessionTimeout: 30 * 60 * 1000, // 30 minutes
     };
 
