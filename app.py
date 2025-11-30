@@ -25,32 +25,25 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change in production
     
-    # Enable CORS for specific domains
-    from flask_cors import CORS
-    CORS(app, resources={
-        r"/track": {
-            "origins": [
-                "https://dnstrainer.com", 
-                "https://booking.dnstrainer.com", 
-                "http://localhost:5000",
-                re.compile(r"^https://.*\.dnstrainer\.com$")
-            ],
-            "methods": ["GET", "POST", "OPTIONS"],
-            "allow_headers": ["Content-Type"],
-            "supports_credentials": False
-        },
-        r"/api/*": {
-            "origins": [
-                "https://dnstrainer.com", 
-                "https://booking.dnstrainer.com", 
-                "http://localhost:5000",
-                re.compile(r"^https://.*\.dnstrainer\.com$")
-            ],
-            "methods": ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
-            "allow_headers": ["Content-Type"],
-            "supports_credentials": False
-        }
-    })
+    # Manual CORS handling - simpler and more reliable
+    @app.after_request
+    def add_cors_headers(response):
+        origin = request.headers.get('Origin')
+        # Allow requests from dnstrainer.com and all subdomains
+        if origin and (origin == 'https://dnstrainer.com' or 
+                      origin == 'https://booking.dnstrainer.com' or
+                      origin == 'http://localhost:5000' or
+                      origin.endswith('.dnstrainer.com')):
+            response.headers['Access-Control-Allow-Origin'] = origin
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+            response.headers['Access-Control-Max-Age'] = '3600'
+        return response
+    
+    # Handle OPTIONS requests explicitly
+    @app.route('/track', methods=['OPTIONS'])
+    def track_options():
+        return '', 200
     
     # Register Blueprints
     app.register_blueprint(main_bp)
