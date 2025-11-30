@@ -2,7 +2,7 @@
 Flask web application for URL generator.
 """
 
-from flask import Flask
+from flask import Flask, request
 import sys
 from pathlib import Path
 
