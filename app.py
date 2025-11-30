@@ -6,6 +6,9 @@ from flask import Flask
 import sys
 from pathlib import Path
 
+import re
+# ...
+
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
@@ -25,8 +28,8 @@ def create_app():
     # Enable CORS for specific domains
     from flask_cors import CORS
     CORS(app, resources={
-        r"/track": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", "https://*.dnstrainer.com"]},
-        r"/api/*": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", "https://*.dnstrainer.com"]}
+        r"/track": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", re.compile(r"^https://.*\.dnstrainer\.com$")]},
+        r"/api/*": {"origins": ["https://dnstrainer.com", "https://booking.dnstrainer.com", "http://localhost:5000", re.compile(r"^https://.*\.dnstrainer\.com$")]}
     })
     
     # Register Blueprints
