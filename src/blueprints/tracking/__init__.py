@@ -5,7 +5,7 @@ import logging
 
 tracking_bp = Blueprint('tracking', __name__)
 
-@tracking_bp.route('/track', methods=['GET', 'POST'])
+@tracking_bp.route('/track', methods=['GET', 'POST', 'OPTIONS'])
 def track():
     """
     Tracking endpoint that captures all query parameters and stores them in MongoDB.
