@@ -210,6 +210,18 @@ def process_tracking_event():
         "domain": ".".join(request.host.split(".")[-2:]) if request.host.count(".") > 1 else request.host,
         "subdomain": request.host.split(".")[0] if request.host.count(".") > 1 else "www"
     }
+
+    # Override host/domain/subdomain if 'url' parameter is present (from client-side script)
+    if params.get("url"):
+        try:
+            parsed_url = urlparse(params.get("url"))
+            hostname = parsed_url.netloc
+            if hostname:
+                event_data["host"] = hostname
+                event_data["domain"] = ".".join(hostname.split(".")[-2:]) if hostname.count(".") > 1 else hostname
+                event_data["subdomain"] = hostname.split(".")[0] if hostname.count(".") > 1 else "www"
+        except Exception as e:
+            logger.warning(f"Failed to parse URL for host detection: {e}")
     
     # Remove None values to keep database clean
     event_data = {k: v for k, v in event_data.items() if v is not None}
