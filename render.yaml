@@ -9,7 +9,7 @@ services:
         value: 3.11.0
       - key: FLASK_ENV
         value: production
-      - key: MONGO_URI
+      - key: MONGODB_URI
         sync: false
       - key: SECRET_KEY
         generateValue: true
