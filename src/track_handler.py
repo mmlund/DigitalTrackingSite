@@ -223,6 +223,10 @@ def process_tracking_event():
         except Exception as e:
             logger.warning(f"Failed to parse URL for host detection: {e}")
     
+    # Respect backend-provided defaults if they exist (e.g. from Easy!Appointments PHP backend)
+    # The PHP backend sends utm_source='easyappointments' and utm_medium='backend'
+    # We should ensure these aren't overwritten by "Unknown" or other logic if already present in params
+    
     # Remove None values to keep database clean
     event_data = {k: v for k, v in event_data.items() if v is not None}
     
