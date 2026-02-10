@@ -21,6 +21,10 @@ def track():
         'https://www.dnstrainer.com',
         'https://booking.dnstrainer.com',
         'https://www.booking.dnstrainer.com',
+        'https://scandinavianclinic.com',
+        'https://www.scandinavianclinic.com',
+        'https://booking.scandinavianclinic.com',
+        'https://www.booking.scandinavianclinic.com',
         'http://localhost:5000',
         'http://127.0.0.1:5000'
     ]

@@ -131,12 +131,15 @@ def process_tracking_event():
         else:
             params = {**request.form.to_dict(), **request.args.to_dict()}
     
-    # Validate required UTM parameters
-    required_utms = ["utm_source", "utm_medium", "utm_campaign"]
-    missing_utms = [utm for utm in required_utms if not params.get(utm)]
-    
-    if missing_utms:
-        raise ValueError(f"Missing required UTM parameters: {', '.join(missing_utms)}")
+    # UTM parameters are only required for legacy ad-tracking events.
+    # Booking events (page_view, scroll, purchase, booking_confirmed) do NOT require UTMs.
+    event_type = params.get("event_type", "")
+    utm_required_types = {"", "ad_click", "landing"}  # Legacy types that need UTMs
+    if event_type in utm_required_types:
+        required_utms = ["utm_source", "utm_medium", "utm_campaign"]
+        missing_utms = [utm for utm in required_utms if not params.get(utm)]
+        if missing_utms:
+            raise ValueError(f"Missing required UTM parameters: {', '.join(missing_utms)}")
     
     # Get client information
     ip_address = get_client_ip()
@@ -189,7 +192,8 @@ def process_tracking_event():
         "platform_detected": platform_detected,
         
         # Behavioral & Pathway Data
-        "event_type": params.get("event_type", "page_view"),
+        "event_type": event_type if event_type else "page_view",
+        "site_id": params.get("site_id"),
         "current_page": params.get("current_page"),
         "previous_page": params.get("previous_page"),
         "sequence_step": params.get("sequence_step"),

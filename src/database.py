@@ -100,7 +100,9 @@ def create_indexes():
         ("gclid", 1),
         ("fbclid", 1),
         ("platform_detected", 1),
-        ("created_at", 1)
+        ("created_at", 1),
+        ("event_type", 1),
+        ("site_id", 1),
     ]
     
     for field, direction in indexes:

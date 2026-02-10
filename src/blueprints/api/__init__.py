@@ -189,6 +189,8 @@ def get_events_api():
         # Get filter parameters
         campaign_id = request.args.get('campaign_id', '').strip()
         utm_source = request.args.get('utm_source', '').strip()
+        site_id = request.args.get('site_id', '').strip()
+        event_type = request.args.get('event_type', '').strip()
         date_from = request.args.get('date_from', '').strip()
         date_to = request.args.get('date_to', '').strip()
         page = int(request.args.get('page', 1))
@@ -202,6 +204,12 @@ def get_events_api():
         
         if utm_source:
             filter_dict["utm_source"] = utm_source
+        
+        if site_id:
+            filter_dict["site_id"] = site_id
+        
+        if event_type:
+            filter_dict["event_type"] = event_type
         
         if date_from or date_to:
             date_filter = {}
@@ -253,11 +261,15 @@ def get_filter_options():
     try:
         campaign_ids = get_unique_values("campaign_id")
         utm_sources = get_unique_values("utm_source")
+        site_ids = get_unique_values("site_id")
+        event_types = get_unique_values("event_type")
         
         return jsonify({
             "success": True,
             "campaign_ids": sorted([c for c in campaign_ids if c]),
-            "utm_sources": sorted([u for u in utm_sources if u])
+            "utm_sources": sorted([u for u in utm_sources if u]),
+            "site_ids": sorted([s for s in site_ids if s]),
+            "event_types": sorted([e for e in event_types if e])
         })
     except Exception as e:
         return jsonify({
