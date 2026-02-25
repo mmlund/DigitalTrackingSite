@@ -1,0 +1,271 @@
+================================================================================
+DATABASE AUDIT REPORT
+================================================================================
+
+Total events in database: 3007
+
+------------------------------------------------------------
+EVENTS BY TYPE:
+------------------------------------------------------------
+  page_view: 2536
+  scroll: 142
+  conversion: 102
+  booking_confirmed: 98
+  step_view: 90
+  purchase: 37
+  test_event_post: 1
+  test_event: 1
+
+------------------------------------------------------------
+EVENTS BY DOMAIN:
+------------------------------------------------------------
+  (none): 2004
+  onrender.com: 750
+  dnstrainer.com: 190
+  scandinavianclinic.com: 49
+  localhost:5000: 9
+  lovable.app: 4
+  pages.dev: 1
+
+------------------------------------------------------------
+EVENTS BY HOST:
+------------------------------------------------------------
+  (none): 2004
+  digitaltrackingsite.onrender.com: 750
+  booking.dnstrainer.com: 124
+  booking.scandinavianclinic.com: 49
+  dnstrainer.com: 32
+  www.booking.dnstrainer.com: 23
+  www.dnstrainer.com: 11
+  localhost:5000: 9
+  id-preview--85e8ed4e-fa2b-4f89-a601-b589f9680622.lovable.app: 4
+  dnstrainersite.pages.dev: 1
+
+------------------------------------------------------------
+EVENTS BY SITE_ID:
+------------------------------------------------------------
+  (none): 2866
+  default: 63
+  dnstrainer: 59
+  scandinavian: 19
+
+------------------------------------------------------------
+CUSTOMER DATA FIELDS CHECK:
+------------------------------------------------------------
+  [TOP-LEVEL] 'customer_name': NOT FOUND
+  [TOP-LEVEL] 'customer_email': NOT FOUND
+  [TOP-LEVEL] 'customer_phone': NOT FOUND
+  [TOP-LEVEL] 'name': NOT FOUND
+  [TOP-LEVEL] 'email': NOT FOUND
+  [TOP-LEVEL] 'phone': NOT FOUND
+  [TOP-LEVEL] 'first_name': NOT FOUND
+  [TOP-LEVEL] 'last_name': NOT FOUND
+
+  --- Inside raw_params ---
+  [RAW_PARAMS] 'raw_params.customer_name': 98 docs (sample: Test User)
+  [RAW_PARAMS] 'raw_params.customer_email': 135 docs (sample: test.user@example.com)
+  [RAW_PARAMS] 'raw_params.customer_phone': 98 docs (sample: 555-0123)
+  [RAW_PARAMS] 'raw_params.name': NOT FOUND
+  [RAW_PARAMS] 'raw_params.email': NOT FOUND
+  [RAW_PARAMS] 'raw_params.phone': NOT FOUND
+  [RAW_PARAMS] 'raw_params.first_name': NOT FOUND
+  [RAW_PARAMS] 'raw_params.last_name': NOT FOUND
+  [RAW_PARAMS] 'raw_params.customer_first_name': NOT FOUND
+  [RAW_PARAMS] 'raw_params.customer_last_name': NOT FOUND
+
+------------------------------------------------------------
+BOOKING/PURCHASE EVENTS (last 10):
+------------------------------------------------------------
+
+  --- Event #1 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-19 22:53:36.899000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     dnstrainer
+  UTM Source:  easyappointments
+  raw_params.customer_name: Michael Auld
+  raw_params.customer_email: mike.b.auld@gmail.com
+  raw_params.customer_phone: 6043548850
+
+  --- Event #2 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-19 22:51:15.260000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     dnstrainer
+  UTM Source:  easyappointments
+  raw_params.customer_name: Michael Auld
+  raw_params.customer_email: mike.b.auld@gmail.com
+  raw_params.customer_phone: 6043548850
+
+  --- Event #3 ---
+  Type:        purchase
+  Timestamp:   2026-02-16 23:02:01.151000
+  Domain:      scandinavianclinic.com
+  Host:        booking.scandinavianclinic.com
+  Site ID:     default
+  UTM Source:  
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.service_name: Scandinavian Subsequent Visit 30 Minutes
+  raw_params.revenue: 100
+  raw_params.transaction_id: EA-29
+  raw_params.currency: CAD
+
+  --- Event #4 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-16 23:01:59.004000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     scandinavian
+  UTM Source:  easyappointments_scandinavian
+  raw_params.customer_name: Mats Lundstrom
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.customer_phone: 6046037023
+
+  --- Event #5 ---
+  Type:        purchase
+  Timestamp:   2026-02-16 22:54:36.491000
+  Domain:      dnstrainer.com
+  Host:        booking.dnstrainer.com
+  Site ID:     default
+  UTM Source:  
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.service_name: DNS Training -30 min
+  raw_params.revenue: 105
+  raw_params.transaction_id: EA-80
+  raw_params.currency: CAD
+
+  --- Event #6 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-16 22:54:32.468000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     dnstrainer
+  UTM Source:  easyappointments
+  raw_params.customer_name: Mats Lundstrom
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.customer_phone: 6046037023
+
+  --- Event #7 ---
+  Type:        purchase
+  Timestamp:   2026-02-14 04:23:31.448000
+  Domain:      dnstrainer.com
+  Host:        booking.dnstrainer.com
+  Site ID:     default
+  UTM Source:  
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.service_name: DNS Training -30 min
+  raw_params.revenue: 105
+  raw_params.transaction_id: EA-79
+  raw_params.currency: CAD
+
+  --- Event #8 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-14 04:23:28.338000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     dnstrainer
+  UTM Source:  easyappointments
+  raw_params.customer_name: Mats Lundstrom
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.customer_phone: 6046037023
+
+  --- Event #9 ---
+  Type:        purchase
+  Timestamp:   2026-02-14 04:21:17.411000
+  Domain:      scandinavianclinic.com
+  Host:        booking.scandinavianclinic.com
+  Site ID:     default
+  UTM Source:  
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.service_name: Scandinavian Subsequent Visit 30 Minutes
+  raw_params.revenue: 100
+  raw_params.transaction_id: EA-28
+  raw_params.currency: CAD
+
+  --- Event #10 ---
+  Type:        booking_confirmed
+  Timestamp:   2026-02-14 04:21:15.317000
+  Domain:      onrender.com
+  Host:        digitaltrackingsite.onrender.com
+  Site ID:     scandinavian
+  UTM Source:  easyappointments_scandinavian
+  raw_params.customer_name: Mats Lundstrom
+  raw_params.customer_email: mmlund@hotmail.com
+  raw_params.customer_phone: 6046037023
+
+------------------------------------------------------------
+FULL RAW_PARAMS SAMPLES:
+------------------------------------------------------------
+
+  Latest 'booking_confirmed' raw_params:
+{   'booking_id': 'BK-82',
+    'customer_email': 'mike.b.auld@gmail.com',
+    'customer_name': 'Michael Auld',
+    'customer_phone': '6043548850',
+    'event_type': 'booking_confirmed',
+    'site_id': 'dnstrainer',
+    'timestamp': '2026-02-19T22:53:36+00:00',
+    'utm_campaign': 'booking_confirmation',
+    'utm_medium': 'backend',
+    'utm_source': 'easyappointments'}
+
+  Latest 'purchase' raw_params:
+{   'currency': 'CAD',
+    'customer_email': 'mmlund@hotmail.com',
+    'event_type': 'purchase',
+    'revenue': 100,
+    'service_name': 'Scandinavian Subsequent Visit 30 Minutes',
+    'site_id': 'default',
+    'timestamp': '2026-02-16T23:02:00.785Z',
+    'transaction_id': 'EA-29',
+    'url': 'https://booking.scandinavianclinic.com/index.php/booking_confirmation/of/H8JRjLDrqzf9'}
+
+------------------------------------------------------------
+BOOKING EVENTS BY DOMAIN/HOST/SITE_ID:
+------------------------------------------------------------
+  domain=onrender.com, host=digitaltrackingsite.onrender.com, site_id=None: 62 events
+  domain=onrender.com, host=digitaltrackingsite.onrender.com, site_id=dnstrainer: 19 events
+  domain=scandinavianclinic.com, host=booking.scandinavianclinic.com, site_id=default: 18 events
+  domain=onrender.com, host=digitaltrackingsite.onrender.com, site_id=scandinavian: 16 events
+  domain=dnstrainer.com, host=booking.dnstrainer.com, site_id=default: 14 events
+  domain=dnstrainer.com, host=www.booking.dnstrainer.com, site_id=default: 3 events
+  domain=dnstrainer.com, host=booking.dnstrainer.com, site_id=dnstrainer: 2 events
+  domain=localhost:5000, host=localhost:5000, site_id=dnstrainer: 1 events
+
+------------------------------------------------------------
+ALL UNIQUE DOMAINS:
+------------------------------------------------------------
+  dnstrainer.com
+  localhost:5000
+  lovable.app
+  onrender.com
+  pages.dev
+  scandinavianclinic.com
+
+ALL UNIQUE HOSTS:
+  booking.dnstrainer.com
+  booking.scandinavianclinic.com
+  digitaltrackingsite.onrender.com
+  dnstrainer.com
+  dnstrainersite.pages.dev
+  id-preview--85e8ed4e-fa2b-4f89-a601-b589f9680622.lovable.app
+  localhost:5000
+  www.booking.dnstrainer.com
+  www.dnstrainer.com
+
+ALL UNIQUE SITE_IDs:
+  default
+  dnstrainer
+  scandinavian
+
+------------------------------------------------------------
+DATA DATE RANGE:
+------------------------------------------------------------
+  Oldest event: 2025-11-05 07:11:29.357000
+  Newest event: 2026-02-20 00:15:49.574000
+
+================================================================================
+AUDIT COMPLETE
+================================================================================

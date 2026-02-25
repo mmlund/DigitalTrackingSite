@@ -1,32 +1,214 @@
 {
-  "conversations": [
+  "raw_events": [
     {
-      "customer_id": "C789",
-      "text": "Hello, I would like to know more about your services. Sure, we offer...",
-      "summary": "Summary of: Hello, I would like to know more about your servic...",
-      "created_at": "2025-11-27T19:21:19.329968",
-      "_id": "a643c48f-5ea2-4780-817e-f9b7c083d9c9"
+      "event_type": "page_view",
+      "occurred_at": "2025-08-29T23:04:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-old-001",
+      "visitor_id": "visitor-return-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/",
+      "raw_params": {},
+      "_id": "648a1192-86b6-4bf6-ace4-2b4834b57736"
+    },
+    {
+      "event_type": "page_view",
+      "occurred_at": "2026-02-11T23:04:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-new-001",
+      "visitor_id": "visitor-new-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/booking",
+      "raw_params": {},
+      "_id": "d0a49446-deb0-43b6-9bd3-7a19fec712be"
+    },
+    {
+      "event_type": "scroll",
+      "occurred_at": "2026-02-11T23:05:02.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-new-001",
+      "visitor_id": "visitor-new-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/booking",
+      "raw_params": {
+        "scroll_depth": "75"
+      },
+      "_id": "e48c203c-bea9-43ca-acf4-323965478fbc"
+    },
+    {
+      "event_type": "booking_confirmed",
+      "occurred_at": "2026-02-11T23:09:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-new-001",
+      "visitor_id": "visitor-new-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/booking/confirm",
+      "raw_params": {},
+      "_id": "8cc89b06-4852-467d-92ce-88a18f4c2e6d"
+    },
+    {
+      "event_type": "purchase",
+      "occurred_at": "2026-02-11T23:14:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-new-001",
+      "visitor_id": "visitor-new-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "raw_params": {
+        "revenue": "150.00"
+      },
+      "_id": "73b6cf25-bfcc-4aea-8b75-65863d52bcfb"
+    },
+    {
+      "event_type": "booking_confirmed",
+      "occurred_at": "2026-02-18T23:04:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-ret-001",
+      "visitor_id": "visitor-return-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "raw_params": {},
+      "_id": "182156c8-d909-4f7b-8f14-26d762640b95"
+    },
+    {
+      "event_type": "purchase",
+      "occurred_at": "2026-02-18T23:09:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-ret-001",
+      "visitor_id": "visitor-return-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "raw_params": {
+        "revenue": "250.00"
+      },
+      "_id": "fc83bbce-617a-43a0-bf78-1a8cdeeed10b"
+    },
+    {
+      "event_type": "page_view",
+      "occurred_at": "2026-02-19T01:04:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-lost-001",
+      "visitor_id": "visitor-lost-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/book-now",
+      "raw_params": {},
+      "_id": "732a41cf-8200-430b-a7f0-9781e2d75025"
+    },
+    {
+      "event_type": "page_view",
+      "occurred_at": "2026-02-19T01:06:32.882662",
+      "site_id": "scandinavian",
+      "session_id": "sess-lost-001",
+      "visitor_id": "visitor-lost-001",
+      "utm": {
+        "source": "google",
+        "medium": "cpc",
+        "campaign": "spring-ads-2026"
+      },
+      "url": "https://booking.scandinavianclinic.com/pricing",
+      "raw_params": {},
+      "_id": "e2e6e3d3-9604-4188-b3e3-020419859c34"
     }
   ],
-  "surveys": [
+  "identities": [],
+  "identity_links": [],
+  "campaigns": [
     {
-      "email": "test@example.com",
-      "type": "feedback",
-      "status": "sent",
-      "triggered_at": "2025-11-27T19:21:23.387492",
-      "_id": "63c0efc1-d51d-4f27-b1fd-08841a70f987"
+      "campaign_id": "camp-test-001",
+      "name": "Test Google Ads Campaign",
+      "site_id": "scandinavian",
+      "channel": "google_ads",
+      "status": "active",
+      "tracking_defaults": {
+        "utm_campaign_slug": "spring-ads-2026",
+        "utm_source": "google",
+        "utm_medium": "cpc"
+      },
+      "planning": {
+        "rationale": "Drive bookings",
+        "target_persona": "Adults 25-45",
+        "target_audience": "Local area",
+        "primary_goal": "bookings",
+        "offer": "Free consultation"
+      },
+      "notes": "Test campaign notes",
+      "created_at": "2026-02-11T23:04:32.882662",
+      "updated_at": "2026-02-18T23:04:32.882662",
+      "_id": "bffcc7f1-f8b0-4d7a-8ee6-2aad9b5a04e5"
+    },
+    {
+      "campaign_id": "camp-inactive-001",
+      "name": "Old Campaign",
+      "site_id": "scandinavian",
+      "channel": "meta",
+      "status": "ended",
+      "tracking_defaults": {
+        "utm_campaign_slug": "old-meta-2025",
+        "utm_source": "facebook",
+        "utm_medium": "paid"
+      },
+      "created_at": "2025-08-29T23:04:32.882662",
+      "updated_at": "2025-08-29T23:04:32.882662",
+      "_id": "79bf9187-d37f-45d2-8712-0c933b9f1753"
+    }
+  ],
+  "campaign_spend": [
+    {
+      "campaign_id": "camp-test-001",
+      "month": "2026-02",
+      "amount": 1500.0,
+      "currency": "USD",
+      "_id": "f85068ff-fb0c-49e0-a62a-9e44bd409000"
     }
   ],
   "therapist_ratings": [
     {
-      "therapist_id": "T123",
-      "patient_id": "P456",
+      "therapist_id": "t001",
+      "rating": 4,
+      "created_at": "2026-02-18T23:04:32.882662",
+      "_id": "49eba4ad-48c5-47b0-82fa-c82019a841f6"
+    },
+    {
+      "therapist_id": "t001",
+      "patient_id": "p001",
       "rating": 5,
-      "relevance_score": null,
-      "notes": "Great session",
-      "date": "2025-11-27",
-      "created_at": "2025-11-27T19:21:27.436228",
-      "_id": "7dfcd404-3f29-4de8-bed7-ac29f782f01d"
+      "created_at": "2026-02-18T23:04:32.882662",
+      "_id": "d65e51c0-bd6f-42c2-b210-37dddaa3fbb2"
+    },
+    {
+      "therapist_id": "t002",
+      "rating": 2,
+      "created_at": "2026-02-11T23:04:32.882662",
+      "_id": "f6799150-33a6-4c38-888b-6e668b4a7414"
     }
   ]
 }

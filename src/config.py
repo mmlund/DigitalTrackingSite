@@ -75,3 +75,7 @@ MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "DNStrainerDB")
 # OpenAI Configuration
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 
+# Campaign Asset Upload Configuration
+MAX_UPLOAD_SIZE = 16 * 1024 * 1024  # 16 MB
+ALLOWED_ASSET_EXTENSIONS = {'csv', 'txt', 'jpg', 'jpeg', 'png', 'gif', 'pdf'}
+

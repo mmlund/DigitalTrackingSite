@@ -1,0 +1,96 @@
+======================================================================
+1. SEARCH FOR stage.scandinavianclinic.com
+======================================================================
+  Events with host containing 'stage': 0
+  Events with domain containing 'stage': 0
+  Events with raw_params.url containing 'stage': 0
+  Events with full_url containing 'stage': 0
+  Events with raw_params.site_id containing 'scand': 19
+
+======================================================================
+2. www.dnstrainer.com vs dnstrainer.com BREAKDOWN
+======================================================================
+
+  Host: www.dnstrainer.com (11 events)
+    event_type=scroll: 6
+    event_type=page_view: 5
+    domain field: dnstrainer.com
+    site_id: None
+
+  Host: dnstrainer.com (32 events)
+    event_type=page_view: 27
+    event_type=scroll: 5
+    domain field: dnstrainer.com
+    site_id: None
+
+  Host: www.booking.dnstrainer.com (23 events)
+    event_type=step_view: 15
+    event_type=page_view: 5
+    event_type=purchase: 3
+    domain field: dnstrainer.com
+    site_id: dnstrainer
+
+  Host: booking.dnstrainer.com (124 events)
+    event_type=step_view: 75
+    event_type=page_view: 33
+    event_type=purchase: 16
+    domain field: dnstrainer.com
+    site_id: dnstrainer
+
+======================================================================
+3. digitaltrackingsite.onrender.com ANALYSIS
+======================================================================
+  Total events with host=digitaltrackingsite.onrender.com: 750
+
+  By event_type:
+    page_view: 522
+    scroll: 129
+    booking_confirmed: 97
+    test_event_post: 1
+    test_event: 1
+
+  By site_id:
+    (none): 715
+    dnstrainer: 19
+    scandinavian: 16
+
+  By raw_params.url (first 10):
+    (no url param): 99
+    https://dnstrainer.com/: 99
+    https://booking.dnstrainer.com/: 89
+    http://dnstrainer.com/: 47
+    https://www.dnstrainer.com/: 27
+    https://www.booking.dnstrainer.com/: 26
+    https://dnstrainer.com/book-session: 16
+    https://dnstrainersite.pages.dev/: 13
+    https://dnstrainer.com/#what-is-dns: 11
+    https://id-preview--85e8ed4e-fa2b-4f89-a601-b589f9680622.lovable.app/?__lovable_...: 7
+
+  Sample booking_confirmed from render host:
+    utm_source: easyappointments
+    site_id: None
+    raw_params.url: (none)
+    full_url: https://digitaltrackingsite.onrender.com/track
+
+======================================================================
+4. NON-RENDER HOST EVENTS (frontend-sourced)
+======================================================================
+  host=None, type=page_view: 1902
+  host=None, type=conversion: 102
+  host=booking.dnstrainer.com, type=step_view: 75
+  host=booking.dnstrainer.com, type=page_view: 33
+  host=booking.scandinavianclinic.com, type=page_view: 29
+  host=dnstrainer.com, type=page_view: 27
+  host=booking.scandinavianclinic.com, type=purchase: 18
+  host=booking.dnstrainer.com, type=purchase: 16
+  host=www.booking.dnstrainer.com, type=step_view: 15
+  host=localhost:5000, type=page_view: 8
+  host=www.dnstrainer.com, type=scroll: 6
+  host=www.booking.dnstrainer.com, type=page_view: 5
+  host=dnstrainer.com, type=scroll: 5
+  host=www.dnstrainer.com, type=page_view: 5
+  host=id-preview--85e8ed4e-fa2b-4f89-a601-b589f9680622.lovable.app, type=page_view: 4
+  host=www.booking.dnstrainer.com, type=purchase: 3
+  host=booking.scandinavianclinic.com, type=scroll: 2
+  host=localhost:5000, type=booking_confirmed: 1
+  host=dnstrainersite.pages.dev, type=page_view: 1

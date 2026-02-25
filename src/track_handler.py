@@ -361,6 +361,28 @@ def process_tracking_event():
         if params.get(field) and field not in _ENVELOPE_KEYS:
             event_data[field] = params[field]
 
+    # Phase 3B: Promote appointment fields to top-level.
+    appointment_fields = [
+        "appointment_id", "appointment_datetime",
+        "cancelled_by", "cancel_reason",
+    ]
+    for field in appointment_fields:
+        if params.get(field) and field not in _ENVELOPE_KEYS:
+            event_data[field] = params[field]
+
+    # Normalize appointment_id for booking-related events
+    _APPT_EVENT_TYPES = {
+        "booking_confirmed", "booking_cancelled", "attended", "no_show", "purchase",
+    }
+    if event_type in _APPT_EVENT_TYPES and not event_data.get("appointment_id"):
+        aid = params.get("booking_id") or params.get("appointment_id")
+        if not aid:
+            tid = params.get("transaction_id", "")
+            if isinstance(tid, str) and tid.startswith("EA-"):
+                aid = tid
+        if aid:
+            event_data["appointment_id"] = str(aid)
+
     # Remove None values from NON-envelope fields to keep database clean.
     # Envelope fields (visitor_id, referrer, url) are allowed to be None/absent.
     envelope_nullable = {"visitor_id", "referrer", "url"}

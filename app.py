@@ -17,6 +17,8 @@ from src.blueprints.tracking import tracking_bp
 from src.blueprints.dashboard import dashboard_bp
 from src.blueprints.api import api_bp
 from src.blueprints.analysis import analysis_bp
+from src.blueprints.campaigns import campaigns_bp
+from src.blueprints.reports import reports_bp
 from src.modules.therapist import therapist_bp
 from src.modules.surveys import surveys_bp
 from src.modules.conversations import conversations_bp
@@ -24,6 +26,7 @@ from src.modules.conversations import conversations_bp
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change in production
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB upload limit
     
     # Register Blueprints
     app.register_blueprint(main_bp)
@@ -31,6 +34,8 @@ def create_app():
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(analysis_bp)
+    app.register_blueprint(campaigns_bp)
+    app.register_blueprint(reports_bp)
     app.register_blueprint(therapist_bp)
     app.register_blueprint(surveys_bp)
     app.register_blueprint(conversations_bp)

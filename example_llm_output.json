@@ -1,0 +1,70 @@
+{
+  "analysis_date": "2026-02-25T04:32:55.468975",
+  "period_days": 30,
+  "total_campaigns": 7,
+  "campaign_data": [
+    {
+      "source": "easyappointments_scandinavian",
+      "campaign": "booking_system",
+      "medium": "backend",
+      "clicks": 11,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "direct",
+      "campaign": "general",
+      "medium": "organic",
+      "clicks": 317,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "google",
+      "campaign": "scandinavian_launch",
+      "medium": "cpc",
+      "clicks": 1,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "easyappointments",
+      "campaign": "booking_confirmation",
+      "medium": "backend",
+      "clicks": 21,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "easyappointments_scandinavian",
+      "campaign": "booking_confirmation",
+      "medium": "backend",
+      "clicks": 16,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "easyappointments",
+      "campaign": "booking_system",
+      "medium": "backend",
+      "clicks": 19,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    },
+    {
+      "source": "",
+      "campaign": "",
+      "medium": "",
+      "clicks": 332,
+      "conversions": 0,
+      "revenue": 0,
+      "conversion_rate": 0.0
+    }
+  ]
+}

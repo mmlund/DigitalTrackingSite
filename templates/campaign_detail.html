@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ campaign.name if campaign else 'New Campaign' }} — Campaign Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+
+        .nav-bar a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-bar a:hover {
+            color: #fff;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group.full {
+            flex-basis: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        input[type="date"],
+        input[type="number"],
+        input[type="month"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1f2937;
+            background: #f9fafb;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+        }
+
+        input[readonly],
+        select[disabled] {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1.5px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .inline-actions {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-scheduled {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-draft {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-paused {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-ended {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Dynamic list items */
+        .list-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .list-item input {
+            flex: 1;
+        }
+
+        .list-item .remove-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 4px;
+        }
+
+        /* Generated links table */
+        .links-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .links-table th {
+            text-align: left;
+            padding: 8px 10px;
+            background: #f9fafb;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .links-table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+
+        .url-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            word-break: break-all;
+            max-width: 400px;
+            color: #4b5563;
+        }
+
+        .copy-btn {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            background: #667eea;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd6;
+        }
+
+        /* Spend table */
+        .spend-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .spend-table th {
+            text-align: left;
+            padding: 8px;
+            background: #f9fafb;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6b7280;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .spend-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* Assets */
+        .asset-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .asset-meta {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            z-index: 9999;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-success {
+            background: #10b981;
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .read-only-notice {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+
+            .form-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="nav-bar">
+            <a href="/campaigns">← Back to Campaigns</a>
+            {% if campaign %}
+            <span style="color: rgba(255,255,255,0.5)">|</span>
+            <span style="color: rgba(255,255,255,0.7); font-size: 14px;">
+                {{ campaign.name }}
+                <span class="status-badge status-{{ campaign.status }}">{{ campaign.status }}</span>
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- Campaign Info -->
+        <div class="card">
+            <h2>{{ 'Edit Campaign' if campaign else 'New Campaign' }}</h2>
+            <form id="campaignForm">
+                <div class="form-row">
+                    <div class="form-group" style="flex:2">
+                        <label for="name">Campaign Name <span class="required">*</span></label>
+                        <input type="text" id="name" value="{{ campaign.name if campaign else '' }}" required
+                            placeholder="e.g. Spring Back Pain Campaign">
+                    </div>
+                    <div class="form-group">
+                        <label for="site_id">Site <span class="required">*</span></label>
+                        <select id="site_id">
+                            {% for s in sites %}
+                            <option value="{{ s }}" {{ 'selected' if campaign and campaign.site_id==s else '' }}>{{ s |
+                                title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="channel">Channel <span class="required">*</span></label>
+                        <select id="channel">
+                            {% for ch in channels %}
+                            <option value="{{ ch }}" {{ 'selected' if campaign and campaign.channel==ch else '' }}>{{ ch
+                                | replace('_', ' ') | title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status">
+                            {% for st in statuses %}
+                            <option value="{{ st }}" {{ 'selected' if campaign and campaign.status==st else '' }}>{{ st
+                                | title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="planned_start_date">Planned Start Date</label>
+                        <input type="date" id="planned_start_date"
+                            value="{{ campaign.dates.planned_start_date[:10] if campaign and campaign.dates and campaign.dates.planned_start_date else '' }}">
+                    </div>
+                </div>
+
+                {% if campaign and campaign.dates %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Actual Start Date</label>
+                        <input type="text"
+                            value="{{ campaign.dates.actual_start_date[:10] if campaign.dates.actual_start_date else '(auto-detected)' }}"
+                            readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Seen (Actual End)</label>
+                        <input type="text"
+                            value="{{ campaign.dates.actual_end_date[:10] if campaign.dates.actual_end_date else '(auto-detected)' }}"
+                            readonly>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div style="text-align: right; margin-top: 12px;">
+                    <button type="submit" class="btn btn-primary" id="saveBtn">
+                        {{ 'Save Changes' if campaign else 'Create Campaign' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Planning -->
+        <div class="card">
+            <h2>Planning & Context</h2>
+            <div class="form-row">
+                <div class="form-group full">
+                    <label for="rationale">Rationale</label>
+                    <textarea id="rationale" rows="3"
+                        placeholder="Why are we running this campaign?">{{ campaign.planning.rationale if campaign and campaign.planning else '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="target_persona">Target Persona</label>
+                    <textarea id="target_persona" rows="3"
+                        placeholder="Who is this for?">{{ campaign.planning.target_persona if campaign and campaign.planning else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="target_audience">Target Audience</label>
+                    <textarea id="target_audience" rows="3"
+                        placeholder="Demographics, interests…">{{ campaign.planning.target_audience if campaign and campaign.planning else '' }}</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="primary_goal">Primary Goal</label>
+                    <select id="primary_goal">
+                        <option value="confirmed_bookings" {{ 'selected' if campaign and campaign.planning and
+                            campaign.planning.primary_goal=='confirmed_bookings' else '' }}>Confirmed Bookings</option>
+                        <option value="awareness" {{ 'selected' if campaign and campaign.planning and
+                            campaign.planning.primary_goal=='awareness' else '' }}>Awareness</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="offer">Offer (optional)</label>
+                    <input type="text" id="offer"
+                        value="{{ campaign.planning.offer if campaign and campaign.planning and campaign.planning.offer else '' }}"
+                        placeholder="e.g. 20% off first visit">
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="card">
+            <h2>Notes</h2>
+            <textarea id="notes" rows="4"
+                placeholder="Always-editable free text notes…">{{ campaign.notes if campaign and campaign.notes else '' }}</textarea>
+            {% if campaign and campaign.notes_updated_at %}
+            <p style="font-size: 11px; color: #9ca3af; margin-top: 6px;">Last updated: {{ campaign.notes_updated_at[:19]
+                }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Tracking Defaults -->
+        <div class="card">
+            <h2>Tracking Defaults</h2>
+            {% if campaign and campaign.status == 'active' %}
+            <div class="read-only-notice">
+                ⚠️ Core tracking fields (Source, Medium, Campaign Slug) are locked because this campaign is
+                <strong>Active</strong>.
+            </div>
+            {% endif %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="utm_source">UTM Source <span class="required">*</span></label>
+                    <input type="text" id="utm_source"
+                        value="{{ campaign.tracking_defaults.utm_source if campaign and campaign.tracking_defaults else '' }}"
+                        placeholder="e.g. google, facebook" {{ 'readonly' if campaign and campaign.status=='active'
+                        else '' }}>
+                </div>
+                <div class="form-group">
+                    <label for="utm_medium">UTM Medium <span class="required">*</span></label>
+                    <input type="text" id="utm_medium"
+                        value="{{ campaign.tracking_defaults.utm_medium if campaign and campaign.tracking_defaults else '' }}"
+                        placeholder="e.g. cpc, paid_social" {{ 'readonly' if campaign and campaign.status=='active'
+                        else '' }}>
+                </div>
+                <div class="form-group">
+                    <label for="utm_campaign_slug">Campaign Slug <span class="required">*</span></label>
+                    <input type="text" id="utm_campaign_slug"
+                        value="{{ campaign.tracking_defaults.utm_campaign_slug if campaign and campaign.tracking_defaults else '' }}"
+                        placeholder="e.g. spring_backpain_2026" {{ 'readonly' if campaign and campaign.status=='active'
+                        else '' }}>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="utm_campaign_aliases">Campaign Aliases (comma-separated)</label>
+                    <input type="text" id="utm_campaign_aliases"
+                        value="{{ ', '.join(campaign.tracking_defaults.utm_campaign_aliases) if campaign and campaign.tracking_defaults and campaign.tracking_defaults.utm_campaign_aliases else '' }}"
+                        placeholder="e.g. spring_2026, backpain_spring">
+                </div>
+                <div class="form-group">
+                    <label for="expected_conversion_event">Expected Conversion Event</label>
+                    <select id="expected_conversion_event">
+                        {% set ev = campaign.tracking_defaults.expected_conversion_event if campaign and
+                        campaign.tracking_defaults else 'booking_confirmed' %}
+                        <option value="booking_confirmed" {{ 'selected' if ev=='booking_confirmed' else '' }}>Booking
+                            Confirmed</option>
+                        <option value="purchase" {{ 'selected' if ev=='purchase' else '' }}>Purchase</option>
+                        <option value="engaged_session" {{ 'selected' if ev=='engaged_session' else '' }}>Engaged
+                            Session</option>
+                    </select>
+                </div>
+                <div class="form-group" id="engagementThresholdGroup"
+                    style="{{ 'display:none' if not campaign or not campaign.tracking_defaults or campaign.tracking_defaults.expected_conversion_event != 'engaged_session' else '' }}">
+                    <label for="engagement_seconds_threshold">Engagement Seconds (10-60)</label>
+                    <input type="number" id="engagement_seconds_threshold" min="10" max="60"
+                        value="{{ campaign.tracking_defaults.engagement_seconds_threshold if campaign and campaign.tracking_defaults and campaign.tracking_defaults.engagement_seconds_threshold else 30 }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Landing Pages -->
+        <div class="card">
+            <h2>Landing Pages</h2>
+            <div id="landingPagesList">
+                {% if campaign and campaign.landing_pages %}
+                {% for lp in campaign.landing_pages %}
+                <div class="list-item">
+                    <input type="url" class="landing-page-input" value="{{ lp }}"
+                        placeholder="https://example.com/page">
+                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addLandingPage()">+ Add Landing
+                Page</button>
+        </div>
+
+        {% if campaign %}
+        <!-- Link Generator -->
+        <div class="card">
+            <h2>Link Generator</h2>
+            <p style="font-size: 13px; color: #6b7280; margin-bottom: 16px;">
+                Base UTMs auto-inherited: <strong>{{ campaign.tracking_defaults.utm_source }}</strong> / <strong>{{
+                    campaign.tracking_defaults.utm_medium }}</strong> / <strong>{{
+                    campaign.tracking_defaults.utm_campaign_slug }}</strong>
+            </p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="link_landing_page">Landing Page <span class="required">*</span></label>
+                    <select id="link_landing_page">
+                        <option value="">Select or paste below</option>
+                        {% if campaign.landing_pages %}
+                        {% for lp in campaign.landing_pages %}
+                        <option value="{{ lp }}">{{ lp }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                    <input type="url" id="link_landing_page_custom" placeholder="Or paste a URL"
+                        style="margin-top: 6px;">
+                </div>
+                <div class="form-group">
+                    <label for="link_utm_content">UTM Content (optional)</label>
+                    <input type="text" id="link_utm_content" placeholder="e.g. video_ad_1">
+                </div>
+                <div class="form-group">
+                    <label for="link_utm_term">UTM Term (optional)</label>
+                    <input type="text" id="link_utm_term" placeholder="e.g. back_pain_keywords">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="link_label">Label (optional)</label>
+                    <input type="text" id="link_label" placeholder="e.g. Video Ad 1">
+                </div>
+                <div class="form-group" style="display:flex; align-items:flex-end;">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="link_dynamic">
+                        <label for="link_dynamic">Dynamic Placeholders</label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success" onclick="generateLink()">Generate Link</button>
+
+            <div id="linksTableContainer" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Monthly Spend -->
+        <div class="card">
+            <h2>Monthly Spend</h2>
+            <div class="form-row inline-actions">
+                <div class="form-group" style="max-width: 160px;">
+                    <label for="spend_month">Month</label>
+                    <input type="month" id="spend_month">
+                </div>
+                <div class="form-group" style="max-width: 130px;">
+                    <label for="spend_amount">Amount</label>
+                    <input type="number" id="spend_amount" step="0.01" min="0" placeholder="0.00">
+                </div>
+                <div class="form-group" style="max-width: 90px;">
+                    <label for="spend_currency">Currency</label>
+                    <input type="text" id="spend_currency" value="USD" maxlength="4">
+                </div>
+                <div class="form-group" style="max-width: 130px;">
+                    <label for="spend_source">Source</label>
+                    <select id="spend_source">
+                        <option value="manual">Manual</option>
+                        <option value="imported_google">Google Import</option>
+                        <option value="imported_meta">Meta Import</option>
+                    </select>
+                </div>
+                <div class="form-group" style="max-width: 180px;">
+                    <label for="spend_note">Note</label>
+                    <input type="text" id="spend_note" placeholder="Optional">
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="addSpend()"
+                    style="margin-bottom: 16px;">Add</button>
+            </div>
+            <div id="spendTableContainer"></div>
+        </div>
+
+        <!-- Assets -->
+        <div class="card">
+            <h2>Assets</h2>
+            <div class="form-row inline-actions">
+                <div class="form-group" style="max-width: 180px;">
+                    <label for="asset_type">Type</label>
+                    <select id="asset_type">
+                        <option value="keywords">Keywords</option>
+                        <option value="creative_notes">Creative Notes</option>
+                        <option value="audience_notes">Audience Notes</option>
+                        <option value="ad_examples_images">Ad Examples / Images</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="asset_file">File</label>
+                    <input type="file" id="asset_file" accept=".csv,.txt,.jpg,.jpeg,.png,.gif,.pdf">
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="uploadAsset()"
+                    style="margin-bottom: 16px;">Upload</button>
+            </div>
+            <div class="form-group full" style="margin-top: 8px;">
+                <label for="asset_text">Or paste text (keywords, notes)</label>
+                <textarea id="asset_text" rows="3" placeholder="Paste keywords or notes here…"></textarea>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="saveTextAsset()"
+                    style="margin-top: 6px;">Save Text</button>
+            </div>
+            <div id="assetsContainer" style="margin-top: 16px;"></div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const MODE = '{{ mode }}';
+        const CAMPAIGN_ID = '{{ campaign.campaign_id if campaign else "" }}';
+
+        // ── Toast ────────────────────────────────────
+        function toast(msg, type = 'success') {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.className = 'toast toast-' + type + ' show';
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        // ── Save Campaign ────────────────────────────
+        document.getElementById('campaignForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const body = buildCampaignPayload();
+            const url = MODE === 'create' ? '/api/campaigns' : `/api/campaigns/${CAMPAIGN_ID}`;
+            const method = MODE === 'create' ? 'POST' : 'PUT';
+
+            try {
+                const res = await fetch(url, {
+                    method, headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(MODE === 'create' ? 'Campaign created!' : 'Campaign saved!');
+                    if (MODE === 'create') {
+                        window.location.href = '/campaigns/' + data.campaign.campaign_id;
+                    }
+                } else {
+                    toast('Error: ' + (data.error || 'Unknown'), 'error');
+                }
+            } catch (err) { toast('Error: ' + err.message, 'error'); }
+        });
+
+        function buildCampaignPayload() {
+            const aliases = document.getElementById('utm_campaign_aliases').value
+                .split(',').map(s => s.trim()).filter(Boolean);
+            const lps = Array.from(document.querySelectorAll('.landing-page-input'))
+                .map(el => el.value.trim()).filter(Boolean);
+
+            const payload = {
+                name: document.getElementById('name').value,
+                site_id: document.getElementById('site_id').value,
+                channel: document.getElementById('channel').value,
+                status: document.getElementById('status').value,
+                notes: document.getElementById('notes').value,
+                planning: {
+                    rationale: document.getElementById('rationale').value,
+                    target_persona: document.getElementById('target_persona').value,
+                    target_audience: document.getElementById('target_audience').value,
+                    primary_goal: document.getElementById('primary_goal').value,
+                    offer: document.getElementById('offer').value,
+                },
+                dates: {
+                    planned_start_date: document.getElementById('planned_start_date').value || null,
+                },
+                tracking_defaults: {
+                    utm_source: document.getElementById('utm_source').value,
+                    utm_medium: document.getElementById('utm_medium').value,
+                    utm_campaign_slug: document.getElementById('utm_campaign_slug').value,
+                    utm_campaign_aliases: aliases,
+                    expected_conversion_event: document.getElementById('expected_conversion_event').value,
+                    engagement_seconds_threshold: parseInt(document.getElementById('engagement_seconds_threshold').value) || null,
+                },
+                landing_pages: lps,
+            };
+            return payload;
+        }
+
+        // ── Landing Pages ────────────────────────────
+        function addLandingPage(val = '') {
+            const div = document.createElement('div');
+            div.className = 'list-item';
+            div.innerHTML = `<input type="url" class="landing-page-input" value="${escAttr(val)}" placeholder="https://example.com/page">
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+            document.getElementById('landingPagesList').appendChild(div);
+        }
+
+        // ── Engagement threshold toggle ──────────────
+        document.getElementById('expected_conversion_event').addEventListener('change', function () {
+            document.getElementById('engagementThresholdGroup').style.display =
+                this.value === 'engaged_session' ? '' : 'none';
+        });
+
+        // ── Link Generator ───────────────────────────
+        async function generateLink() {
+            const lp = document.getElementById('link_landing_page').value ||
+                document.getElementById('link_landing_page_custom').value;
+            if (!lp) { toast('Select or paste a landing page', 'error'); return; }
+
+            const body = {
+                landing_page: lp,
+                utm_content: document.getElementById('link_utm_content').value,
+                utm_term: document.getElementById('link_utm_term').value,
+                label: document.getElementById('link_label').value,
+                dynamic_placeholders_enabled: document.getElementById('link_dynamic').checked,
+            };
+
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/links`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('Link generated!');
+                    loadLinks();
+                    // Clear inputs
+                    document.getElementById('link_utm_content').value = '';
+                    document.getElementById('link_utm_term').value = '';
+                    document.getElementById('link_label').value = '';
+                    document.getElementById('link_landing_page_custom').value = '';
+                } else { toast('Error: ' + (data.error || 'Unknown'), 'error'); }
+            } catch (err) { toast('Error: ' + err.message, 'error'); }
+        }
+
+        async function loadLinks() {
+            if (!CAMPAIGN_ID) return;
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/links`);
+                const data = await res.json();
+                if (data.success) renderLinks(data.links);
+            } catch (e) { }
+        }
+
+        function renderLinks(links) {
+            if (!links.length) {
+                document.getElementById('linksTableContainer').innerHTML =
+                    '<p style="color:#9ca3af; font-size:13px;">No links generated yet.</p>';
+                return;
+            }
+            let html = `<table class="links-table"><thead><tr>
+                <th>Label</th><th>URL</th><th>Content</th><th>Term</th><th>Created</th><th></th>
+            </tr></thead><tbody>`;
+            links.forEach(l => {
+                html += `<tr>
+                    <td>${escHtml(l.label || '—')}</td>
+                    <td class="url-cell">${escHtml(l.generated_url)}</td>
+                    <td>${escHtml(l.utm?.content || '—')}</td>
+                    <td>${escHtml(l.utm?.term || '—')}</td>
+                    <td style="white-space:nowrap; font-size:12px; color:#6b7280;">${l.created_at ? l.created_at.substring(0, 10) : ''}</td>
+                    <td><button class="copy-btn" onclick="copyUrl('${escAttr(l.generated_url)}')">Copy</button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('linksTableContainer').innerHTML = html;
+        }
+
+        function copyUrl(url) {
+            navigator.clipboard.writeText(url).then(() => toast('URL copied!'));
+        }
+
+        // ── Spend ────────────────────────────────────
+        async function addSpend() {
+            const month = document.getElementById('spend_month').value;
+            const amount = document.getElementById('spend_amount').value;
+            if (!month || !amount) { toast('Month and amount required', 'error'); return; }
+
+            const body = {
+                month, amount: parseFloat(amount),
+                currency: document.getElementById('spend_currency').value,
+                source: document.getElementById('spend_source').value,
+                note: document.getElementById('spend_note').value,
+            };
+
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/spend`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                if (data.success) { toast('Spend saved!'); loadSpend(); }
+                else { toast('Error: ' + (data.error || ''), 'error'); }
+            } catch (err) { toast('Error: ' + err.message, 'error'); }
+        }
+
+        async function loadSpend() {
+            if (!CAMPAIGN_ID) return;
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/spend`);
+                const data = await res.json();
+                if (data.success) renderSpend(data.spend);
+            } catch (e) { }
+        }
+
+        function renderSpend(entries) {
+            if (!entries.length) {
+                document.getElementById('spendTableContainer').innerHTML =
+                    '<p style="color:#9ca3af; font-size:13px;">No spend entries yet.</p>';
+                return;
+            }
+            let html = `<table class="spend-table"><thead><tr>
+                <th>Month</th><th>Amount</th><th>Currency</th><th>Source</th><th>Note</th>
+            </tr></thead><tbody>`;
+            entries.forEach(s => {
+                html += `<tr>
+                    <td>${escHtml(s.month)}</td>
+                    <td>${Number(s.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+                    <td>${escHtml(s.currency || '')}</td>
+                    <td>${escHtml(s.source || '')}</td>
+                    <td>${escHtml(s.note || '—')}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('spendTableContainer').innerHTML = html;
+        }
+
+        // ── Assets ───────────────────────────────────
+        async function uploadAsset() {
+            const file = document.getElementById('asset_file').files[0];
+            if (!file) { toast('Select a file', 'error'); return; }
+
+            const form = new FormData();
+            form.append('file', file);
+            form.append('asset_type', document.getElementById('asset_type').value);
+
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/assets`, {
+                    method: 'POST', body: form
+                });
+                const data = await res.json();
+                if (data.success) { toast('Asset uploaded!'); loadAssets(); document.getElementById('asset_file').value = ''; }
+                else { toast('Error: ' + (data.error || ''), 'error'); }
+            } catch (err) { toast('Error: ' + err.message, 'error'); }
+        }
+
+        async function saveTextAsset() {
+            const text = document.getElementById('asset_text').value.trim();
+            if (!text) { toast('Enter some text', 'error'); return; }
+
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/assets`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        asset_type: document.getElementById('asset_type').value,
+                        raw_text: text
+                    })
+                });
+                const data = await res.json();
+                if (data.success) { toast('Text asset saved!'); loadAssets(); document.getElementById('asset_text').value = ''; }
+                else { toast('Error: ' + (data.error || ''), 'error'); }
+            } catch (err) { toast('Error: ' + err.message, 'error'); }
+        }
+
+        async function loadAssets() {
+            if (!CAMPAIGN_ID) return;
+            try {
+                const res = await fetch(`/api/campaigns/${CAMPAIGN_ID}/assets`);
+                const data = await res.json();
+                if (data.success) renderAssets(data.assets);
+            } catch (e) { }
+        }
+
+        function renderAssets(assets) {
+            if (!assets.length) {
+                document.getElementById('assetsContainer').innerHTML =
+                    '<p style="color:#9ca3af; font-size:13px;">No assets uploaded yet.</p>';
+                return;
+            }
+            let html = '';
+            assets.forEach(a => {
+                const hasFile = a.storage_provider === 'gridfs';
+                html += `<div class="asset-item">
+                    <div>
+                        <strong>${escHtml(a.filename || a.asset_type)}</strong>
+                        <span class="asset-meta">${a.asset_type} · ${a.created_at ? a.created_at.substring(0, 10) : ''}</span>
+                        ${a.raw_text ? '<br><span style="font-size:12px;color:#4b5563;">' + escHtml(a.raw_text.substring(0, 120)) + (a.raw_text.length > 120 ? '…' : '') + '</span>' : ''}
+                    </div>
+                    ${hasFile ? `<a href="/api/campaigns/${CAMPAIGN_ID}/assets/${a.asset_id}/download" class="btn btn-secondary btn-sm">Download</a>` : ''}
+                </div>`;
+            });
+            document.getElementById('assetsContainer').innerHTML = html;
+        }
+
+        // ── Helpers ──────────────────────────────────
+        function escHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+        function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+        // ── Initial load ─────────────────────────────
+        if (CAMPAIGN_ID) { loadLinks(); loadSpend(); loadAssets(); }
+    </script>
+</body>
+
+</html>

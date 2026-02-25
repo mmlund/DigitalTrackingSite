@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Tracker Set-up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #d1d5db;
+            color: #374151;
+        }
+
+        .btn-outline:hover {
+            background: #f3f4f6;
+        }
+
+        /* Filter bar */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-bar select {
+            padding: 8px 12px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            background: #f9fafb;
+            color: #374151;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .filter-bar select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-bar .clear-btn {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #6b7280;
+            font-family: inherit;
+        }
+
+        .filter-bar .clear-btn:hover {
+            background: #e5e7eb;
+        }
+
+        /* Table */
+        .campaign-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13px;
+        }
+
+        .campaign-table thead th {
+            background: #f9fafb;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #4b5563;
+            border-bottom: 2px solid #e5e7eb;
+            white-space: nowrap;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .campaign-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .campaign-table tbody tr:hover {
+            background: #f0f1ff;
+        }
+
+        .campaign-table td {
+            padding: 14px 14px;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        .campaign-name {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-scheduled {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-draft {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-paused {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-ended {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Channel badges */
+        .channel-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* Actions cell */
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        /* Date cells */
+        .date-cell {
+            white-space: nowrap;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Spend cell */
+        .spend-cell {
+            font-size: 12px;
+        }
+
+        .spend-amount {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .spend-month {
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .campaign-table {
+                font-size: 12px;
+            }
+
+            .campaign-table td,
+            .campaign-table th {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Campaign Tracker Set-up</h1>
+                <p class="subtitle">Browse, filter, and manage your marketing campaigns</p>
+            </div>
+            <a href="/campaigns/new" class="btn-primary">+ Add Campaign</a>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <select id="filterChannel">
+                <option value="">All Channels</option>
+                {% for ch in channels %}
+                <option value="{{ ch }}">{{ ch | replace('_', ' ') | title }}</option>
+                {% endfor %}
+            </select>
+            <select id="filterSite">
+                <option value="">All Sites</option>
+                {% for s in sites %}
+                <option value="{{ s }}">{{ s | title }}</option>
+                {% endfor %}
+            </select>
+            <select id="filterStatus">
+                <option value="">All Statuses</option>
+                {% for st in statuses %}
+                <option value="{{ st }}">{{ st | title }}</option>
+                {% endfor %}
+            </select>
+            <button class="clear-btn" onclick="clearFilters()">Clear</button>
+        </div>
+
+        <!-- Campaign Table -->
+        <div id="tableContainer">
+            <div class="loading" id="loadingState">Loading campaigns…</div>
+        </div>
+    </div>
+
+    <script>
+        let allCampaigns = [];
+
+        async function loadCampaigns() {
+            const params = new URLSearchParams();
+            const ch = document.getElementById('filterChannel').value;
+            const si = document.getElementById('filterSite').value;
+            const st = document.getElementById('filterStatus').value;
+            if (ch) params.set('channel', ch);
+            if (si) params.set('site_id', si);
+            if (st) params.set('status', st);
+
+            try {
+                const res = await fetch('/api/campaigns?' + params.toString());
+                const data = await res.json();
+                if (data.success) {
+                    allCampaigns = data.campaigns;
+                    renderTable(allCampaigns);
+                } else {
+                    document.getElementById('tableContainer').innerHTML =
+                        '<div class="empty-state"><h3>Error loading campaigns</h3><p>' + (data.error || '') + '</p></div>';
+                }
+            } catch (err) {
+                document.getElementById('tableContainer').innerHTML =
+                    '<div class="empty-state"><h3>Connection error</h3><p>' + err.message + '</p></div>';
+            }
+        }
+
+        function renderTable(campaigns) {
+            if (campaigns.length === 0) {
+                document.getElementById('tableContainer').innerHTML =
+                    '<div class="empty-state"><h3>No campaigns yet</h3><p>Click "Add Campaign" to get started</p></div>';
+                return;
+            }
+
+            let html = `<table class="campaign-table">
+                <thead><tr>
+                    <th>Name</th><th>Site</th><th>Channel</th><th>Status</th>
+                    <th>Planned Start</th><th>Actual Start</th><th>Last Seen</th>
+                    <th>Latest Spend</th><th>Links</th><th>Actions</th>
+                </tr></thead><tbody>`;
+
+            campaigns.forEach(c => {
+                const dates = c.dates || {};
+                const spend = c.latest_spend;
+                html += `<tr onclick="window.location='/campaigns/${c.campaign_id}'" id="row-${c.campaign_id}">
+                    <td class="campaign-name">${escHtml(c.name)}</td>
+                    <td>${escHtml(c.site_id || '')}</td>
+                    <td><span class="channel-badge">${escHtml((c.channel || '').replace('_', ' '))}</span></td>
+                    <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+                    <td class="date-cell">${fmtDate(dates.planned_start_date)}</td>
+                    <td class="date-cell">${fmtDate(dates.actual_start_date)}</td>
+                    <td class="date-cell">${fmtDate(dates.actual_end_date)}</td>
+                    <td class="spend-cell">${spend ? `<span class="spend-amount">${spend.currency || ''} ${Number(spend.amount).toLocaleString()}</span><br><span class="spend-month">${spend.month}</span>` : '—'}</td>
+                    <td>${c.link_count || 0}</td>
+                    <td class="actions-cell" onclick="event.stopPropagation()">
+                        <button class="btn-sm btn-outline" onclick="quickStatus('${c.campaign_id}', '${c.status}')">Status</button>
+                        <button class="btn-sm btn-outline" onclick="duplicateCampaign('${c.campaign_id}')">Dup</button>
+                    </td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('tableContainer').innerHTML = html;
+        }
+
+        function fmtDate(d) {
+            if (!d) return '—';
+            try { return new Date(d).toLocaleDateString('en-CA'); } catch { return '—'; }
+        }
+
+        function escHtml(s) {
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        async function quickStatus(id, current) {
+            const order = ['draft', 'scheduled', 'active', 'paused', 'ended'];
+            const idx = order.indexOf(current);
+            const next = prompt(`Set status for campaign:\n\nCurrent: ${current}\nOptions: ${order.join(', ')}`, order[(idx + 1) % order.length]);
+            if (!next || !order.includes(next)) return;
+            try {
+                const res = await fetch(`/api/campaigns/${id}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: next })
+                });
+                const data = await res.json();
+                if (data.success) loadCampaigns();
+                else alert('Error: ' + (data.error || 'Unknown'));
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        async function duplicateCampaign(id) {
+            if (!confirm('Duplicate this campaign?')) return;
+            try {
+                const res = await fetch(`/api/campaigns/${id}/duplicate`, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) loadCampaigns();
+                else alert('Error: ' + (data.error || 'Unknown'));
+            } catch (e) { alert('Error: ' + e.message); }
+        }
+
+        function clearFilters() {
+            document.getElementById('filterChannel').value = '';
+            document.getElementById('filterSite').value = '';
+            document.getElementById('filterStatus').value = '';
+            loadCampaigns();
+        }
+
+        // Attach filter listeners
+        ['filterChannel', 'filterSite', 'filterStatus'].forEach(id => {
+            document.getElementById(id).addEventListener('change', loadCampaigns);
+        });
+
+        // Initial load
+        loadCampaigns();
+    </script>
+</body>
+
+</html>

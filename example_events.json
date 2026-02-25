@@ -1,0 +1,130 @@
+{
+  "scandinavianclinic.com": {
+    "_id": {
+      "$oid": "698accf0215e85d348986828"
+    },
+    "timestamp": {
+      "$date": "2026-02-10T06:15:12.721Z"
+    },
+    "created_at": {
+      "$date": "2026-02-10T06:15:12.721Z"
+    },
+    "utm_source": "",
+    "utm_medium": "",
+    "utm_campaign": "",
+    "session_id": "sess_2fa8ebddf4",
+    "ip_address": "127.0.0.1",
+    "user_agent": "python-requests/2.32.5",
+    "full_url": "http://localhost:5000/track",
+    "platform_detected": "Unknown",
+    "event_type": "scroll",
+    "site_id": "scandinavian",
+    "raw_params": {
+      "event_type": "scroll",
+      "url": "https://booking.scandinavianclinic.com/index.php",
+      "scroll_depth": 50,
+      "timestamp": "2026-02-10T06:15:10.702774",
+      "site_id": "scandinavian"
+    },
+    "host": "booking.scandinavianclinic.com",
+    "domain": "scandinavianclinic.com",
+    "subdomain": "booking"
+  },
+  "dnstrainer.com": {
+    "_id": {
+      "$oid": "698b18eb93ef7f46a5575c9a"
+    },
+    "timestamp": {
+      "$date": "2026-02-10T11:39:22.871Z"
+    },
+    "created_at": {
+      "$date": "2026-02-10T11:39:22.871Z"
+    },
+    "utm_source": "direct",
+    "utm_medium": "organic",
+    "utm_campaign": "general",
+    "session_id": "sess_a9ba4e59b6",
+    "referrer_url": "https://dnstrainer.com/",
+    "ip_address": "202.8.42.250",
+    "user_agent": "Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)",
+    "full_url": "https://digitaltrackingsite.onrender.com/track",
+    "platform_detected": "Unknown",
+    "event_type": "page_view",
+    "raw_params": {
+      "event_type": "page_view",
+      "url": "https://dnstrainer.com/",
+      "referrer": "",
+      "user_agent": "Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)",
+      "timestamp": "2026-02-10T11:39:22.479Z",
+      "utm_source": "direct",
+      "utm_medium": "organic",
+      "utm_campaign": "general"
+    },
+    "host": "dnstrainer.com",
+    "domain": "dnstrainer.com",
+    "subdomain": "www"
+  },
+  "booking.scandinavianclinic.com": {
+    "_id": {
+      "$oid": "698accf0215e85d348986828"
+    },
+    "timestamp": {
+      "$date": "2026-02-10T06:15:12.721Z"
+    },
+    "created_at": {
+      "$date": "2026-02-10T06:15:12.721Z"
+    },
+    "utm_source": "",
+    "utm_medium": "",
+    "utm_campaign": "",
+    "session_id": "sess_2fa8ebddf4",
+    "ip_address": "127.0.0.1",
+    "user_agent": "python-requests/2.32.5",
+    "full_url": "http://localhost:5000/track",
+    "platform_detected": "Unknown",
+    "event_type": "scroll",
+    "site_id": "scandinavian",
+    "raw_params": {
+      "event_type": "scroll",
+      "url": "https://booking.scandinavianclinic.com/index.php",
+      "scroll_depth": 50,
+      "timestamp": "2026-02-10T06:15:10.702774",
+      "site_id": "scandinavian"
+    },
+    "host": "booking.scandinavianclinic.com",
+    "domain": "scandinavianclinic.com",
+    "subdomain": "booking"
+  },
+  "booking.dnstrainer.com": {
+    "_id": {
+      "$oid": "698accee215e85d348986827"
+    },
+    "timestamp": {
+      "$date": "2026-02-10T06:15:05.724Z"
+    },
+    "created_at": {
+      "$date": "2026-02-10T06:15:05.724Z"
+    },
+    "utm_source": "",
+    "utm_medium": "",
+    "utm_campaign": "",
+    "session_id": "sess_e9e6778262",
+    "ip_address": "127.0.0.1",
+    "user_agent": "python-requests/2.32.5",
+    "full_url": "http://localhost:5000/track",
+    "platform_detected": "Unknown",
+    "event_type": "page_view",
+    "site_id": "dnstrainer",
+    "raw_params": {
+      "event_type": "page_view",
+      "url": "https://booking.dnstrainer.com/index.php",
+      "referrer": "https://dnstrainer.com/",
+      "user_agent": "Mozilla/5.0 Test",
+      "timestamp": "2026-02-10T06:15:03.702660",
+      "site_id": "dnstrainer"
+    },
+    "host": "booking.dnstrainer.com",
+    "domain": "dnstrainer.com",
+    "subdomain": "booking"
+  }
+}

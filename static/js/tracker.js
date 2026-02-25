@@ -34,15 +34,32 @@
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        // Use root domain to share across subdomains
+        const hostname = window.location.hostname;
+        const parts = hostname.split('.');
+        const domain = parts.length > 2 ? "." + parts.slice(-2).join('.') : "." + hostname;
+
+        document.cookie = name + "=" + (value || "") + expires + "; path=/; domain=" + domain + "; SameSite=Lax";
     }
+
+    // Device Identification (First-Party Cookie)
+    function getOrCreateDeviceId() {
+        let deviceId = getCookie('_dts_id');
+        if (!deviceId) {
+            deviceId = generateUUID();
+            setCookie('_dts_id', deviceId, 730); // 2 years
+        }
+        return deviceId;
+    }
+
+    const DEVICE_ID = getOrCreateDeviceId();
 
     // Session Management
     function getSessionId() {
         let sessionId = getCookie('dns_session_id');
         if (!sessionId) {
             sessionId = generateUUID();
-            setCookie('dns_session_id', sessionId, 1); // 1 day expiry for session cookie? Maybe less.
+            setCookie('dns_session_id', sessionId, 1); // 1 day
         }
         return sessionId;
     }
@@ -84,6 +101,7 @@
         return {
             event_type: eventType,
             timestamp: new Date().toISOString(),
+            device_id: DEVICE_ID,
             session_id: sessionId,
             url: window.location.href,
             ...pathway,

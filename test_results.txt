@@ -1,0 +1,69 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\mmlun\Antigravity\DigitalTrackingSite
+plugins: anyio-4.11.0
+collecting ... collected 24 items
+
+tests/test_analysis.py::TestAnalysis::test_ask_data PASSED               [  4%]
+tests/test_app.py::TestApp::test_dashboard PASSED                        [  8%]
+tests/test_app.py::TestApp::test_generate_api PASSED                     [ 12%]
+tests/test_app.py::TestApp::test_index PASSED                            [ 16%]
+tests/test_app.py::TestApp::test_track_missing_params PASSED             [ 20%]
+tests/test_app.py::TestApp::test_track_valid PASSED                      [ 25%]
+tests/test_envelope.py::TestEnvelopeFields::test_event_type_defaults_to_unknown PASSED [ 29%]
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_falls_back_to_server_time PASSED [ 33%]
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_from_raw_params_timestamp PASSED [ 37%]
+tests/test_envelope.py::TestEnvelopeFields::test_raw_params_preserved PASSED [ 41%]
+tests/test_envelope.py::TestEnvelopeFields::test_schema_version_present PASSED [ 45%]
+tests/test_envelope.py::TestEnvelopeFields::test_site_id_defaults_to_unknown PASSED [ 50%]
+tests/test_envelope.py::TestEnvelopeFields::test_site_id_inferred_from_host PASSED [ 54%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_defaults_to_web PASSED [ 58%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_from_booking_host PASSED [ 62%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_from_utm PASSED [ 66%]
+tests/test_envelope.py::TestEnvelopeFields::test_utm_object_empty_strings_become_none PASSED [ 70%]
+tests/test_envelope.py::TestEnvelopeFields::test_utm_object_populated PASSED [ 75%]
+tests/test_envelope.py::TestEnvelopeFields::test_visitor_id_from_device_id PASSED [ 79%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_channel_conversion_rate PASSED [ 83%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings PASSED [ 87%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_revenue_summed_from_purchases PASSED [ 91%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_site_separation PASSED [ 95%]
+tests/test_tracking_json.py::TestTrackingJSON::test_track_json_payload PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_analysis.py::TestAnalysis::test_ask_data
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\blueprints\analysis\__init__.py:21: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    end_date = datetime.utcnow()
+
+tests/test_envelope.py: 13 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_envelope.py: 12 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:135: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow()
+
+tests/test_envelope.py: 13 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:281: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    server_received_at = datetime.utcnow()
+
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_falls_back_to_server_time
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_envelope.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    diff = (datetime.utcnow() - event["occurred_at"]).total_seconds()
+
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_channel_conversion_rate
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_revenue_summed_from_purchases
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_site_separation
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\analysis\llm_preprocessor.py:19: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    start = datetime.utcnow() - timedelta(days=days)
+
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_llm_preprocessor.py:20: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 24 passed, 48 warnings in 1.38s =======================

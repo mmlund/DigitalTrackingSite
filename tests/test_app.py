@@ -16,9 +16,9 @@ class TestApp(unittest.TestCase):
 
     def test_index(self):
         response = self.app.get('/')
-        self.assertEqual(response.status_code, 200)
-        # Check for some content that should be there
-        self.assertIn(b'DNS Tracking URL Generator', response.data)
+        self.assertEqual(response.status_code, 302)
+        # Should redirect to /campaigns
+        self.assertIn('/campaigns', response.headers.get('Location', ''))
 
     def test_dashboard(self):
         response = self.app.get('/dashboard')

@@ -1,0 +1,52 @@
+﻿python : Event received without event_type, defaulting to 'unknown'
+At line:1 char:24
++ $env:TEST_MODE="True"; python verify_phase1.py 2>&1 | Out-File 
+-FileP ...
++                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Event received ...ng to ' 
+   unknown':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+[1mEvent 1: Web page_view (dnstrainer.com)[0m
+  [PASS] 200 OK
+  [PASS] schema_version = 1
+  [PASS] event_type = page_view
+  [PASS] occurred_at is datetime
+  [PASS] site_id = dnstrainer
+  [PASS] host = dnstrainer.com
+  [PASS] domain = dnstrainer.com
+  [PASS] url present
+  [PASS] visitor_id = dvc_test_001
+  [PASS] utm.source = google
+  [PASS] utm.medium = cpc
+  [PASS] utm.campaign = summer_promo
+  [PASS] source_system = web
+  [PASS] raw_params preserved
+
+[1mEvent 2: booking_confirmed (booking.scandinavianclinic.com)[0m
+  [PASS] 200 OK
+  [PASS] event_type = booking_confirmed
+  [PASS] site_id inferred = scandinavian
+  [PASS] source_system = easyappointments_scandinavian
+  [PASS] utm.source = easyappointments_scandinavian
+  [PASS] customer_name promoted
+  [PASS] raw_params has booking_id
+
+[1mEvent 3: purchase (booking.dnstrainer.com)[0m
+  [PASS] 200 OK
+  [PASS] event_type = purchase
+  [PASS] site_id = dnstrainer
+  [PASS] source_system = easyappointments_dnstrainer
+  [PASS] utm.source is None (no UTM)
+  [PASS] raw_params.revenue = 105
+
+[1mEvent 4: Missing event_type (should default to unknown)[0m
+  [PASS] 200 OK (not rejected)
+  [PASS] event_type = unknown
+  [PASS] site_id inferred = dnstrainer
+
+=======================================================
+ALL CHECKS PASSED
+=======================================================
+
