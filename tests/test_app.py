@@ -40,11 +40,12 @@ class TestApp(unittest.TestCase):
             self.assertEqual(response.json['id'], '12345')
 
     def test_track_missing_params(self):
-        # We need to mock get_client_ip and is_rate_limited too
+        # Legacy ad-tracking events (ad_click, landing) still require UTMs.
+        # Missing medium and campaign should cause a 400.
         with patch('src.blueprints.tracking.get_client_ip', return_value='127.0.0.1'), \
              patch('src.blueprints.tracking.is_rate_limited', return_value=(False, 10, 0)):
             
-            response = self.app.get('/track?utm_source=test')
+            response = self.app.get('/track?event_type=ad_click&utm_source=test')
             # Should fail because medium and campaign are missing
             self.assertEqual(response.status_code, 400)
 

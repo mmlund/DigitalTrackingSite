@@ -91,6 +91,7 @@ def create_indexes():
     """Create indexes for efficient querying."""
     collection = get_collection()
     
+    # Legacy indexes (kept for backward compat)
     indexes = [
         ("timestamp", 1),
         ("campaign_id", 1),
@@ -105,12 +106,36 @@ def create_indexes():
         ("site_id", 1),
     ]
     
-    for field, direction in indexes:
+    # Phase 1 envelope indexes
+    envelope_indexes = [
+        ("occurred_at", 1),
+        ("schema_version", 1),
+        ("source_system", 1),
+    ]
+    
+    all_indexes = indexes + envelope_indexes
+    
+    for field, direction in all_indexes:
         try:
             collection.create_index([(field, direction)])
             logger.info(f"Created index on {field}")
         except Exception as e:
             logger.warning(f"Index on {field} may already exist: {e}")
+    
+    # Compound indexes for common queries
+    compound_indexes = [
+        [("site_id", 1), ("utm.source", 1)],
+        [("site_id", 1), ("event_type", 1)],
+        [("site_id", 1), ("occurred_at", -1)],
+    ]
+    
+    for index_spec in compound_indexes:
+        try:
+            collection.create_index(index_spec)
+            field_names = "+".join(f[0] for f in index_spec)
+            logger.info(f"Created compound index on {field_names}")
+        except Exception as e:
+            logger.warning(f"Compound index may already exist: {e}")
 
 
 def insert_event(event_data):
@@ -269,6 +294,10 @@ class MockDatabase:
 import uuid
 import json
 from unittest.mock import MagicMock
+from .config import MONGODB_URI, MONGODB_DB_NAME, TEST_MODE
+import logging
+
+logger = logging.getLogger(__name__)
 
 _mock_db = MockDatabase()
 
@@ -276,14 +305,20 @@ def get_collection(collection_name="raw_events"):
     """Get collection instance (or mock)."""
     global _client, _db
     
+    # Force mock mode if TEST_MODE is enabled
+    if TEST_MODE:
+        if collection_name == "raw_events": # Only log once for main collection
+            logger.info(f"Using Mock Database (TEST_MODE=True) for collection: {collection_name}")
+        return _mock_db[collection_name]
+    
     try:
         # Try to get real DB
         if _db is None:
             get_database()
         return _db[collection_name]
-    except:
-        # Fallback to mock
-        logger.warning(f"Using Mock Database for collection: {collection_name}")
+    except Exception as e:
+        # Fallback to mock if real DB fails
+        logger.warning(f"Connection to real DB failed, falling back to Mock Database: {e}")
         return _mock_db[collection_name]
 
 

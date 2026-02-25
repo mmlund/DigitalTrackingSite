@@ -1,10 +1,15 @@
 """
 Track handler for processing and storing tracking events.
+
+Phase 1 — Envelope Fields
+Every event now includes a standardized "envelope" of top-level fields
+(occurred_at, utm.*, source_system, schema_version, visitor_id, etc.)
+alongside the original raw_params dict.
 """
 
 import uuid
 from datetime import datetime, timedelta
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse
 from flask import request
 from .database import insert_event, get_collection
 from .config import BASE_URL
@@ -12,18 +17,33 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# Current envelope schema version — bump when envelope shape changes.
+SCHEMA_VERSION = 1
+
 # Session management: 60-minute timeout
 SESSION_TIMEOUT = timedelta(minutes=60)
-_active_sessions = {}  # Store active sessions: {session_id: last_activity}
+_active_sessions = {}  # {session_id: last_activity}
+
+# Known host → site_id mapping for inference
+_HOST_SITE_MAP = {
+    "booking.dnstrainer.com": "dnstrainer",
+    "dnstrainer.com": "dnstrainer",
+    "www.dnstrainer.com": "dnstrainer",
+    "www.booking.dnstrainer.com": "dnstrainer",
+    "booking.scandinavianclinic.com": "scandinavian",
+    "scandinavianclinic.com": "scandinavian",
+    "www.scandinavianclinic.com": "scandinavian",
+    "www.booking.scandinavianclinic.com": "scandinavian",
+}
 
 
 def detect_platform(params):
     """
     Auto-detect platform from parameters.
-    
+
     Args:
         params (dict): Request parameters
-        
+
     Returns:
         str: Detected platform name
     """
@@ -53,7 +73,7 @@ def detect_platform(params):
             return "LinkedIn"
         elif "email" in source or "mailchimp" in source:
             return "Email"
-    
+
     return "Unknown"
 
 
@@ -61,51 +81,36 @@ def get_or_create_session_id(params, ip_address):
     """
     Get existing session ID or create a new one.
     Sessions expire after 60 minutes of inactivity.
-    
-    Args:
-        params (dict): Request parameters
-        ip_address (str): Client IP address
-        
-    Returns:
-        str: Session ID
     """
     now = datetime.utcnow()
-    
-    # Check if session_id is provided
     provided_session_id = params.get("session_id")
-    
+
     if provided_session_id:
-        # Validate existing session
         if provided_session_id in _active_sessions:
             last_activity = _active_sessions[provided_session_id]
             if now - last_activity < SESSION_TIMEOUT:
-                # Session is still active, update last activity
                 _active_sessions[provided_session_id] = now
                 return provided_session_id
             else:
-                # Session expired, create new one
                 del _active_sessions[provided_session_id]
-    
-    # Create new session
+
     session_id = f"sess_{uuid.uuid4().hex[:10]}"
     _active_sessions[session_id] = now
-    
+
     # Clean up expired sessions periodically
-    if len(_active_sessions) > 1000:  # Prevent memory bloat
-        expired_sessions = [
-            sid for sid, last_activity in _active_sessions.items()
-            if now - last_activity >= SESSION_TIMEOUT
+    if len(_active_sessions) > 1000:
+        expired = [
+            sid for sid, ts in _active_sessions.items()
+            if now - ts >= SESSION_TIMEOUT
         ]
-        for sid in expired_sessions:
+        for sid in expired:
             del _active_sessions[sid]
-    
+
     return session_id
 
 
 def get_client_ip():
     """Get client IP address from request."""
-    from flask import request
-    # Check for forwarded IP (if behind proxy)
     if request.headers.get('X-Forwarded-For'):
         return request.headers.get('X-Forwarded-For').split(',')[0].strip()
     elif request.headers.get('X-Real-IP'):
@@ -114,86 +119,219 @@ def get_client_ip():
         return request.remote_addr or 'unknown'
 
 
+# ── Envelope helpers ─────────────────────────────────────────────────
+
+def _parse_occurred_at(params):
+    """Parse occurred_at from raw_params.timestamp, falling back to server time."""
+    raw_ts = params.get("timestamp")
+    if raw_ts:
+        try:
+            if isinstance(raw_ts, str):
+                return datetime.fromisoformat(raw_ts.replace("Z", "+00:00"))
+            elif isinstance(raw_ts, datetime):
+                return raw_ts
+        except (ValueError, TypeError):
+            logger.warning(f"Could not parse timestamp '{raw_ts}', using server time")
+    return datetime.utcnow()
+
+
+def _resolve_host_domain(params):
+    """
+    Determine host, domain, and subdomain from the params URL or the request.
+    Returns (host, domain, subdomain).
+    """
+    host = request.host
+    domain = "." .join(host.split(".")[-2:]) if host.count(".") > 1 else host
+    subdomain = host.split(".")[0] if host.count(".") > 1 else "www"
+
+    # Override from client-supplied 'url' param if present
+    url_param = params.get("url")
+    if url_param:
+        try:
+            parsed = urlparse(url_param)
+            hostname = parsed.netloc
+            if hostname:
+                host = hostname
+                domain = ".".join(hostname.split(".")[-2:]) if hostname.count(".") > 1 else hostname
+                subdomain = hostname.split(".")[0] if hostname.count(".") > 1 else "www"
+        except Exception as e:
+            logger.warning(f"Failed to parse URL for host detection: {e}")
+
+    # Normalize: strip www. prefix
+    if host.startswith("www."):
+        host = host[4:]
+
+    return host, domain, subdomain
+
+
+def _infer_site_id(params, host):
+    """
+    Infer site_id. Priority:
+      1. Explicit params.site_id
+      2. Known host → site_id mapping
+      3. "unknown"
+    """
+    explicit = params.get("site_id")
+    if explicit:
+        return explicit
+
+    # Try host lookup
+    site_id = _HOST_SITE_MAP.get(host)
+    if site_id:
+        return site_id
+
+    # Try with www. prefix in case it was stripped
+    site_id = _HOST_SITE_MAP.get(f"www.{host}")
+    if site_id:
+        return site_id
+
+    logger.warning(f"Could not infer site_id for host '{host}', defaulting to 'unknown'")
+    return "unknown"
+
+
+def _infer_source_system(params, host, site_id):
+    """
+    Infer source_system using 3-tier priority:
+      1. Booking host or known EA payload fields → easyappointments_<site_id>
+      2. utm_source starts with "easyappointments" → use that value
+      3. Otherwise → "web"
+    """
+    # Tier 1: booking host or EA-specific payload
+    is_booking_host = host.startswith("booking.") or host.startswith("www.booking.")
+    has_ea_payload = bool(params.get("booking_id"))
+
+    if is_booking_host or has_ea_payload:
+        return f"easyappointments_{site_id}"
+
+    # Tier 2: utm_source starts with easyappointments
+    utm_source = (params.get("utm_source") or "").lower()
+    if utm_source.startswith("easyappointments"):
+        return params.get("utm_source")
+
+    # Tier 3: default
+    return "web"
+
+
+def _build_utm_object(params):
+    """Build the normalized nested utm object."""
+    def _or_none(val):
+        """Convert empty string to None."""
+        return val if val else None
+
+    return {
+        "source": _or_none(params.get("utm_source")),
+        "medium": _or_none(params.get("utm_medium")),
+        "campaign": _or_none(params.get("utm_campaign")),
+        "term": _or_none(params.get("utm_term")),
+        "content": _or_none(params.get("utm_content")),
+    }
+
+
+# ── Main processing ─────────────────────────────────────────────────
+
 def process_tracking_event():
     """
     Process and store a tracking event from the request.
-    
+
     Returns:
-        dict: Event data dictionary ready for storage
+        dict: Event data dictionary ready for storage, including envelope fields.
     """
     # Get all parameters (works for both GET and POST)
     if request.method == 'GET':
         params = request.args.to_dict()
     else:
-        # POST: try JSON first, then form data, then query string
         if request.is_json:
             params = request.get_json() or {}
         else:
             params = {**request.form.to_dict(), **request.args.to_dict()}
-    
-    # UTM parameters are only required for legacy ad-tracking events.
-    # Booking events (page_view, scroll, purchase, booking_confirmed) do NOT require UTMs.
+
+    # ── Event type: resolve BEFORE UTM validation ──────────────
     event_type = params.get("event_type", "")
-    utm_required_types = {"", "ad_click", "landing"}  # Legacy types that need UTMs
+    if not event_type:
+        event_type = "unknown"
+        logger.warning("Event received without event_type, defaulting to 'unknown'")
+
+    # ── Validation for legacy UTM-required events ────────────────
+    # Only genuine ad-tracking types require UTM params.
+    # "unknown" (from missing event_type) does NOT require UTMs.
+    utm_required_types = {"ad_click", "landing"}
     if event_type in utm_required_types:
         required_utms = ["utm_source", "utm_medium", "utm_campaign"]
         missing_utms = [utm for utm in required_utms if not params.get(utm)]
         if missing_utms:
             raise ValueError(f"Missing required UTM parameters: {', '.join(missing_utms)}")
-    
-    # Get client information
+
+    # ── Client info ──────────────────────────────────────────────
     ip_address = get_client_ip()
     user_agent = request.headers.get('User-Agent', '')
-    referrer = request.headers.get('Referer', '')
-    full_url = request.url
-    
-    # Generate or get session ID
+    referrer_header = request.headers.get('Referer', '')
+
     session_id = get_or_create_session_id(params, ip_address)
-    
-    # Detect platform
     platform_detected = detect_platform(params)
-    
-    # Build event data
+
+    # ── Resolve host / domain / subdomain ────────────────────────
+    host, domain, subdomain = _resolve_host_domain(params)
+
+    # ── Infer site_id and source_system ──────────────────────────
+    site_id = _infer_site_id(params, host)
+    source_system = _infer_source_system(params, host, site_id)
+
+    # ── Envelope timestamps ──────────────────────────────────────
+    occurred_at = _parse_occurred_at(params)
+    server_received_at = datetime.utcnow()
+
+    # ── Build event data ─────────────────────────────────────────
+    # Envelope fields are set ONCE here — they must not be overwritten below.
     event_data = {
-        # Timestamps
-        "timestamp": datetime.utcnow(),
-        "created_at": datetime.utcnow(),
-        
-        # UTM Parameters
+        # ── ENVELOPE (Phase 1) — single-source-of-truth ──────
+        "schema_version": SCHEMA_VERSION,
+        "event_type": event_type,
+        "occurred_at": occurred_at,
+        "site_id": site_id,
+        "host": host,
+        "domain": domain,
+        "url": params.get("url"),
+        "referrer": params.get("referrer") or referrer_header or None,
+        "session_id": session_id,
+        "visitor_id": params.get("device_id"),
+        "utm": _build_utm_object(params),
+        "source_system": source_system,
+
+        # ── Legacy / backward-compat fields ───────────────────
+        "timestamp": server_received_at,
+        "created_at": server_received_at,
         "utm_source": params.get("utm_source", ""),
         "utm_medium": params.get("utm_medium", ""),
         "utm_campaign": params.get("utm_campaign", ""),
         "utm_content": params.get("utm_content"),
         "utm_term": params.get("utm_term"),
-        
+
         # Platform IDs
         "campaign_id": params.get("campaign_id"),
         "adset_id": params.get("adset_id"),
         "ad_id": params.get("ad_id"),
         "placement": params.get("placement"),
         "igshid": params.get("igshid") or params.get("igsh"),
-        
+
         # Platform Click IDs
         "gclid": params.get("gclid"),
         "fbclid": params.get("fbclid"),
         "ttclid": params.get("ttclid"),
         "msclkid": params.get("msclkid"),
-        
+
         # System-generated
-        "session_id": session_id,
-        "referrer_url": referrer or params.get("referrer_url"),
-        
+        "referrer_url": referrer_header or params.get("referrer_url"),
+
         # Request metadata
         "ip_address": ip_address,
         "user_agent": user_agent,
-        "full_url": full_url,
-        
+        "full_url": request.url,
+
         # Additional
         "platform_detected": platform_detected,
-        
+        "subdomain": subdomain,
+
         # Behavioral & Pathway Data
-        "event_type": event_type if event_type else "page_view",
-        "site_id": params.get("site_id"),
         "current_page": params.get("current_page"),
         "previous_page": params.get("previous_page"),
         "sequence_step": params.get("sequence_step"),
@@ -202,48 +340,45 @@ def process_tracking_event():
         "element_class": params.get("element_class"),
         "element_text": params.get("element_text"),
         "target_url": params.get("target_url"),
-        
+
         # Technical Data
         "screen_resolution": params.get("screen_resolution"),
         "language": params.get("language"),
-        
-        "raw_params": params,  # Store all params as dict for flexibility
-        
-        # Domain & Host Data (Auto-detected)
-        "host": request.host,
-        "domain": ".".join(request.host.split(".")[-2:]) if request.host.count(".") > 1 else request.host,
-        "subdomain": request.host.split(".")[0] if request.host.count(".") > 1 else "www"
+
+        # Raw params — preserved unchanged
+        "raw_params": params,
     }
 
-    # Override host/domain/subdomain if 'url' parameter is present (from client-side script)
-    if params.get("url"):
-        try:
-            parsed_url = urlparse(params.get("url"))
-            hostname = parsed_url.netloc
-            if hostname:
-                event_data["host"] = hostname
-                event_data["domain"] = ".".join(hostname.split(".")[-2:]) if hostname.count(".") > 1 else hostname
-                event_data["subdomain"] = hostname.split(".")[0] if hostname.count(".") > 1 else "www"
-        except Exception as e:
-            logger.warning(f"Failed to parse URL for host detection: {e}")
-    
-    # Respect backend-provided defaults if they exist (e.g. from Easy!Appointments PHP backend)
-    # The PHP backend sends utm_source='easyappointments' and utm_medium='backend'
-    # We should ensure these aren't overwritten by "Unknown" or other logic if already present in params
-    
-    # Remove None values to keep database clean
-    event_data = {k: v for k, v in event_data.items() if v is not None}
-    
+    # Promote customer data fields to top-level for easier querying.
+    # Guard: never overwrite envelope fields.
+    _ENVELOPE_KEYS = {
+        "schema_version", "event_type", "occurred_at", "site_id",
+        "host", "domain", "url", "referrer", "session_id",
+        "visitor_id", "utm", "source_system",
+    }
+    customer_fields = ['customer_name', 'customer_email', 'customer_phone']
+    for field in customer_fields:
+        if params.get(field) and field not in _ENVELOPE_KEYS:
+            event_data[field] = params[field]
+
+    # Remove None values from NON-envelope fields to keep database clean.
+    # Envelope fields (visitor_id, referrer, url) are allowed to be None/absent.
+    envelope_nullable = {"visitor_id", "referrer", "url"}
+    event_data = {
+        k: v for k, v in event_data.items()
+        if v is not None or k in envelope_nullable
+    }
+
     return event_data
 
 
 def store_event(event_data):
     """
     Store event in MongoDB.
-    
+
     Args:
         event_data (dict): Event data dictionary
-        
+
     Returns:
         str: Inserted document ID
     """
@@ -254,4 +389,3 @@ def store_event(event_data):
     except Exception as e:
         logger.error(f"Error storing event: {e}")
         raise
-
