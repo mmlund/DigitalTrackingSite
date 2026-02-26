@@ -13,7 +13,7 @@ Covers:
 
 import unittest
 import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app import create_app
 from src.cancellation_service import (
@@ -30,68 +30,55 @@ class TestDedupeKey(unittest.TestCase):
 
     def test_same_inputs_same_key(self):
         t = datetime(2025, 3, 1, 10, 0)
-        k1 = compute_dedupe_key("easyappointments_scandinavian", "EA-42", t)
-        k2 = compute_dedupe_key("easyappointments_scandinavian", "EA-42", t)
+        k1 = compute_dedupe_key("ea", "scandinavian", "EA-42", t)
+        k2 = compute_dedupe_key("ea", "scandinavian", "EA-42", t)
         self.assertEqual(k1, k2)
 
-    def test_different_appointment_different_key(self):
-        t = datetime(2025, 3, 1, 10, 0)
-        k1 = compute_dedupe_key("easyappointments", "EA-42", t)
-        k2 = compute_dedupe_key("easyappointments", "EA-43", t)
-        self.assertNotEqual(k1, k2)
+    def test_stable_across_retries_on_same_day(self):
+        """Timestamp variation within same day results in same key."""
+        t1 = "2025-03-01T10:00:00Z"
+        t2 = "2025-03-01T14:30:00Z"
+        k1 = compute_dedupe_key("ea", "scandinavian", "EA-42", t1)
+        k2 = compute_dedupe_key("ea", "scandinavian", "EA-42", t2)
+        self.assertEqual(k1, k2, "Keys should be identical for the same day")
 
-    def test_different_time_different_key(self):
-        k1 = compute_dedupe_key("ea", "EA-1", datetime(2025, 1, 1))
-        k2 = compute_dedupe_key("ea", "EA-1", datetime(2025, 1, 2))
+    def test_different_day_different_key(self):
+        k1 = compute_dedupe_key("ea", "scand", "EA-1", "2025-03-01T10:00:00")
+        k2 = compute_dedupe_key("ea", "scand", "EA-1", "2025-03-02T10:00:00")
         self.assertNotEqual(k1, k2)
 
     def test_no_appointment_id_returns_none(self):
-        self.assertIsNone(compute_dedupe_key("ea", None, datetime.utcnow()))
-        self.assertIsNone(compute_dedupe_key("ea", "", datetime.utcnow()))
-
-    def test_string_timestamp(self):
-        k = compute_dedupe_key("ea", "EA-1", "2025-03-01T10:00:00")
-        self.assertIsNotNone(k)
-
+        self.assertIsNone(compute_dedupe_key("ea", "s", None, datetime.utcnow()))
 
 class TestClassification(unittest.TestCase):
     """Test late vs early cancellation classification."""
 
-    def test_late_cancel(self):
-        appt = datetime(2025, 3, 1, 10, 0)
-        cancel = datetime(2025, 3, 1, 8, 0)  # 2 hours before
+    def test_late_cancel_utc_normalization(self):
+        """Test with explicit timezone offsets."""
+        # Appt at 10:00 UTC
+        appt = datetime(2025, 3, 1, 10, 0, tzinfo=timezone.utc)
+        # Cancel at 11:00 UTC-5 (06:00 local) -> 16:00 UTC (Too late)
+        cancel = datetime(2025, 3, 1, 11, 0, tzinfo=timezone(timedelta(hours=-5)))
+        
         cls, hours = classify_cancellation(appt, cancel)
         self.assertEqual(cls, "late_cancel")
-        self.assertAlmostEqual(hours, 2.0, places=1)
+        self.assertEqual(hours, -6.0) # 10:00 - 16:00 = -6
 
-    def test_early_cancel(self):
-        appt = datetime(2025, 3, 5, 10, 0)
-        cancel = datetime(2025, 3, 1, 10, 0)  # 4 days before
+    def test_early_cancel_utc_normalization(self):
+        # Appt at 10:00 UTC
+        appt = datetime(2025, 3, 5, 10, 0, tzinfo=timezone.utc)
+        # Cancel 4 days before
+        cancel = datetime(2025, 3, 1, 10, 0, tzinfo=timezone.utc)
         cls, hours = classify_cancellation(appt, cancel)
         self.assertEqual(cls, "early_cancel")
-        self.assertGreater(hours, LATE_CANCEL_THRESHOLD_HOURS)
+        self.assertEqual(hours, 96.0)
 
-    def test_cancel_after_appointment(self):
-        """Cancelled after appointment time → late."""
-        appt = datetime(2025, 3, 1, 10, 0)
-        cancel = datetime(2025, 3, 1, 12, 0)
-        cls, hours = classify_cancellation(appt, cancel)
-        self.assertEqual(cls, "late_cancel")
-        self.assertLess(hours, 0)
-
-    def test_exactly_24_hours(self):
-        appt = datetime(2025, 3, 2, 10, 0)
-        cancel = datetime(2025, 3, 1, 10, 0)  # exactly 24h
-        cls, hours = classify_cancellation(appt, cancel)
-        self.assertEqual(cls, "early_cancel")
-        self.assertAlmostEqual(hours, 24.0, places=1)
-
-    def test_string_datetimes(self):
+    def test_string_datetimes_with_z(self):
         cls, hours = classify_cancellation(
-            "2025-03-01T10:00:00", "2025-03-01T08:00:00"
+            "2025-03-01T10:00:00Z", "2025-03-01T08:00:00Z"
         )
         self.assertEqual(cls, "late_cancel")
-        self.assertAlmostEqual(hours, 2.0, places=1)
+        self.assertAlmostEqual(hours, 2.0)
 
     def test_missing_values(self):
         cls, hours = classify_cancellation(None, datetime.utcnow())

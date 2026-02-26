@@ -3,6 +3,8 @@ EA Appointment Proxy — fetch appointments from both EA instances (Hub + Spoke)
 
 Uses the same EA REST API as Scandremind but synchronous (requests) for Flask.
 Both instances are queried and results merged for combined schedule views.
+
+EA API integration exists in both DTS and Scandremind intentionally; keep schemas aligned.
 """
 
 import os

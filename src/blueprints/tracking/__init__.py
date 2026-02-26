@@ -6,6 +6,8 @@ from src.rate_limiter import is_rate_limited
 from src.database import get_collection
 import logging
 
+logger = logging.getLogger(__name__)
+
 tracking_bp = Blueprint('tracking', __name__)
 
 @tracking_bp.route('/track', methods=['GET', 'POST', 'OPTIONS'])
@@ -82,8 +84,16 @@ def track():
             if dk:
                 existing = get_collection("raw_events").find_one({"dedupe_key": dk})
                 if existing:
+                    logger.info(f"Duplicate booking_cancelled skipped (dedupe_key: {dk})")
                     response = jsonify({"status": "ok", "id": str(existing.get("_id", "")), "dedupe": "skipped"})
                     return add_cors_headers(response), 200
+        
+        # Phase 3B: Track last seen events for health checks
+        try:
+            from src.health_service import track_last_seen
+            track_last_seen(event_data.get("site_id"), event_data.get("event_type"))
+        except Exception:
+            pass
         
         # Store event in MongoDB
         doc_id = store_event(event_data)
@@ -121,3 +131,15 @@ def track():
             "message": "Internal server error"
         })
         return add_cors_headers(response), 500
+
+@tracking_bp.route('/health/events', methods=['GET'])
+def health_check_events():
+    """
+    Health check endpoint to confirm events are being received.
+    Provides last_seen timestamps per site_id and event_type.
+    """
+    from src.health_service import get_health_summary
+    return jsonify({
+        "status": "ok",
+        "health": get_health_summary()
+    }), 200

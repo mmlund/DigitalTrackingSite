@@ -382,6 +382,11 @@ def process_tracking_event():
                 aid = tid
         if aid:
             event_data["appointment_id"] = str(aid)
+        elif event_type == "booking_cancelled":
+            # Data Quality Signaling (Phase 3B Hardening)
+            logger.warning("booking_cancelled event missing appointment_id — falling back to simple counting")
+            # TODO: Exposure a metric: % events missing appointment_id
+            # This fallback is transitional until EA hooks are fully hardened.
 
     # Remove None values from NON-envelope fields to keep database clean.
     # Envelope fields (visitor_id, referrer, url) are allowed to be None/absent.
