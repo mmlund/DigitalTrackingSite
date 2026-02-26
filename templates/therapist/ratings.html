@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End-of-Day Ratings | Therapist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-hover: #22252f;
+            --border: #2a2d3a;
+            --text: #e8eaed;
+            --text-muted: #8b8fa3;
+            --accent: #6c5ce7;
+            --accent-glow: rgba(108, 92, 231, 0.15);
+            --green: #00b894;
+            --red: #fd7272;
+            --yellow: #fdcb6e;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .date-picker input[type="date"] {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .date-picker input[type="date"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        .nav-links a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .criteria-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .criteria-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .criteria-label {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .criteria-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 0.75rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        td {
+            padding: 0.7rem 0.75rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: var(--surface-hover);
+        }
+
+        .site-badge {
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(108, 92, 231, 0.12);
+            color: #a29bfe;
+        }
+
+        /* Dropdowns */
+        select {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-width: 60px;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+
+        select.filled {
+            border-color: var(--green);
+        }
+
+        select.noshow-yes {
+            border-color: var(--red);
+        }
+
+        /* Toggle switch for no-show */
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border);
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 2px;
+            bottom: 2px;
+            background: var(--text);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: var(--red);
+        }
+
+        .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(16px);
+        }
+
+        .toggle-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .toggle-label.active {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* Submit button */
+        .submit-bar {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-msg {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .status-msg.success {
+            background: rgba(0, 184, 148, 0.12);
+            color: var(--green);
+        }
+
+        .status-msg.error {
+            background: rgba(253, 114, 114, 0.12);
+            color: var(--red);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .noshow-row td {
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .criteria-box {
+                grid-template-columns: 1fr;
+            }
+
+            th,
+            td {
+                padding: 0.5rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            select {
+                min-width: 50px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>End-of-Day Ratings</h1>
+                <p class="subtitle">Rate today's appointments across all sites</p>
+            </div>
+            <div class="date-picker">
+                <input type="date" id="dateInput" />
+            </div>
+        </header>
+
+        <nav class="nav-links">
+            <a href="/api/therapist/schedule-view">Schedule</a>
+            <a href="/api/therapist/ratings-view" class="active">Ratings</a>
+        </nav>
+
+        <div class="criteria-box">
+            <div class="criteria-item">
+                <div>
+                    <div class="criteria-label">Suitability (1–5)</div>
+                    <div class="criteria-text">Was this an appropriate patient with a relevant clinical concern or
+                        question?</div>
+                </div>
+            </div>
+            <div class="criteria-item">
+                <div>
+                    <div class="criteria-label">Satisfaction (1–5)</div>
+                    <div class="criteria-text">Do you believe this patient was happy with the treatment or training
+                        received?</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Appointments</h2>
+                <span class="badge" id="dateBadge"></span>
+            </div>
+            <div id="tableContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading appointments…</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-bar">
+            <div id="statusMsg"></div>
+            <button class="submit-btn" id="submitBtn" onclick="submitRatings()" disabled>
+                Submit Day Ratings
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_TOKEN = 'dev-therapist-token';
+        const THERAPIST_ID = 'therapist_main';
+        const dateInput = document.getElementById('dateInput');
+        let currentAppointments = [];
+
+        // Default to today
+        dateInput.value = new Date().toISOString().split('T')[0];
+        dateInput.addEventListener('change', () => fetchRatings(dateInput.value));
+
+        async function fetchRatings(date) {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading appointments…</p></div>';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('statusMsg').innerHTML = '';
+
+            try {
+                const resp = await fetch(
+                    `/api/therapist/ratings/day?date=${date}&therapist_id=${THERAPIST_ID}`,
+                    { headers: { 'X-Therapist-Token': API_TOKEN } }
+                );
+                const data = await resp.json();
+
+                if (!data.success || !data.appointments.length) {
+                    container.innerHTML = '<div class="empty-state"><p>No appointments for ' + date + '</p></div>';
+                    document.getElementById('dateBadge').textContent = date;
+                    return;
+                }
+
+                currentAppointments = data.appointments;
+                document.getElementById('dateBadge').textContent = date;
+                document.getElementById('submitBtn').disabled = false;
+                renderTable();
+            } catch (err) {
+                container.innerHTML = '<div class="empty-state"><p>Error: ' + err.message + '</p></div>';
+            }
+        }
+
+        function renderTable() {
+            let html = `<table>
+                <thead><tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Name</th>
+                    <th>No-show / Late Cancel</th>
+                    <th>Site</th>
+                    <th>Suitability</th>
+                    <th>Satisfaction</th>
+                </tr></thead><tbody>`;
+
+            currentAppointments.forEach((a, i) => {
+                const noshow = a.no_show_or_late_cancellation;
+                const rowClass = noshow ? 'noshow-row' : '';
+                const suitVal = a.suitability_score || '';
+                const satVal = a.satisfaction_score || '';
+
+                html += `<tr class="${rowClass}" id="row-${i}">
+                    <td>${a.date}</td>
+                    <td>${a.time}</td>
+                    <td>${a.name}</td>
+                    <td>
+                        <div class="toggle-wrapper">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="noshow-${i}" ${noshow ? 'checked' : ''}
+                                       onchange="toggleNoShow(${i})">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label ${noshow ? 'active' : ''}" id="noshow-label-${i}">
+                                ${noshow ? 'Yes' : 'No'}
+                            </span>
+                        </div>
+                    </td>
+                    <td><span class="site-badge">${a.site}</span></td>
+                    <td>
+                        <select id="suit-${i}" class="${suitVal ? 'filled' : ''}"
+                                onchange="markFilled(this)">
+                            <option value="">-</option>
+                            ${[1, 2, 3, 4, 5].map(v =>
+                    `<option value="${v}" ${suitVal == v ? 'selected' : ''}>${v}</option>`
+                ).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="sat-${i}" class="${satVal ? 'filled' : ''}"
+                                onchange="markFilled(this)">
+                            <option value="">-</option>
+                            ${[1, 2, 3, 4, 5].map(v =>
+                    `<option value="${v}" ${satVal == v ? 'selected' : ''}>${v}</option>`
+                ).join('')}
+                        </select>
+                    </td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('tableContainer').innerHTML = html;
+        }
+
+        function toggleNoShow(i) {
+            const checkbox = document.getElementById(`noshow-${i}`);
+            const label = document.getElementById(`noshow-label-${i}`);
+            const row = document.getElementById(`row-${i}`);
+            const checked = checkbox.checked;
+
+            currentAppointments[i].no_show_or_late_cancellation = checked;
+            label.textContent = checked ? 'Yes' : 'No';
+            label.className = 'toggle-label' + (checked ? ' active' : '');
+            row.className = checked ? 'noshow-row' : '';
+        }
+
+        function markFilled(el) {
+            el.className = el.value ? 'filled' : '';
+        }
+
+        async function submitRatings() {
+            const btn = document.getElementById('submitBtn');
+            const msgEl = document.getElementById('statusMsg');
+            btn.disabled = true;
+            msgEl.innerHTML = '';
+
+            // Collect values
+            const ratings = currentAppointments.map((a, i) => {
+                const noshow = document.getElementById(`noshow-${i}`).checked;
+                const suit = document.getElementById(`suit-${i}`).value;
+                const sat = document.getElementById(`sat-${i}`).value;
+
+                return {
+                    appointment_id: a.appointment_id,
+                    site_id: a.site_id,
+                    appointment_start_datetime: a.start_datetime || '',
+                    patient_name: a.name,
+                    no_show_or_late_cancellation: noshow,
+                    suitability_score: suit ? parseInt(suit) : null,
+                    satisfaction_score: sat ? parseInt(sat) : null,
+                };
+            });
+
+            // Validate: non-noshow rows must have both scores
+            const missing = ratings.filter(r =>
+                !r.no_show_or_late_cancellation &&
+                (r.suitability_score === null || r.satisfaction_score === null)
+            );
+
+            if (missing.length > 0) {
+                msgEl.innerHTML = `<span class="status-msg error">
+                    ⚠ ${missing.length} appointment(s) missing required ratings (suitability + satisfaction).
+                </span>`;
+                btn.disabled = false;
+                return;
+            }
+
+            try {
+                const resp = await fetch('/api/therapist/ratings/day', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Therapist-Token': API_TOKEN,
+                    },
+                    body: JSON.stringify({
+                        therapist_id: THERAPIST_ID,
+                        date: dateInput.value,
+                        ratings: ratings,
+                    }),
+                });
+
+                const data = await resp.json();
+
+                if (data.success) {
+                    let msg = `✓ Saved ${data.saved} rating(s). ${data.events_emitted} event(s) emitted.`;
+                    if (data.day_complete) msg += ' Day complete! ✓';
+                    msgEl.innerHTML = `<span class="status-msg success">${msg}</span>`;
+                } else {
+                    msgEl.innerHTML = `<span class="status-msg error">Error: ${data.error || 'Unknown error'}</span>`;
+                }
+
+                if (data.errors && data.errors.length) {
+                    msgEl.innerHTML += `<br><span class="status-msg error">
+                        Errors: ${data.errors.map(e => e.error).join(', ')}
+                    </span>`;
+                }
+            } catch (err) {
+                msgEl.innerHTML = `<span class="status-msg error">Network error: ${err.message}</span>`;
+            }
+
+            btn.disabled = false;
+        }
+
+        // Initial fetch
+        fetchRatings(dateInput.value);
+    </script>
+</body>
+
+</html>

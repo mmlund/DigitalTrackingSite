@@ -459,7 +459,7 @@ class MockCollection:
         return result
 
     def _apply_update(self, doc, update):
-        """Apply MongoDB-style update operators ($set, $unset, $min, $max, $addToSet)."""
+        """Apply MongoDB-style update operators ($set, $unset, $min, $max, $addToSet, $push, $inc)."""
         if "$set" in update:
             for k, v in update["$set"].items():
                 self._set_nested(doc, k, v)
@@ -485,6 +485,20 @@ class MockCollection:
                 elif isinstance(cur, list):
                     if v not in cur:
                         cur.append(v)
+        if "$push" in update:
+            for k, v in update["$push"].items():
+                cur = self._get_nested(doc, k)
+                if cur is None:
+                    self._set_nested(doc, k, [v])
+                elif isinstance(cur, list):
+                    cur.append(v)
+        if "$inc" in update:
+            for k, v in update["$inc"].items():
+                cur = self._get_nested(doc, k)
+                if cur is None:
+                    self._set_nested(doc, k, v)
+                else:
+                    self._set_nested(doc, k, cur + v)
 
     def count_documents(self, filter_dict=None):
         events = self.db.data.get(self.name, [])

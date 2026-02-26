@@ -79,3 +79,14 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 MAX_UPLOAD_SIZE = 16 * 1024 * 1024  # 16 MB
 ALLOWED_ASSET_EXTENSIONS = {'csv', 'txt', 'jpg', 'jpeg', 'png', 'gif', 'pdf'}
 
+# EA API Configuration (for appointment proxy)
+EA_HUB_BASE_URL = os.getenv("EA_HUB_BASE_URL", "")
+EA_HUB_API_TOKEN = os.getenv("EA_HUB_API_TOKEN", "")
+EA_SPOKE_BASE_URL = os.getenv("EA_SPOKE_BASE_URL", "")
+EA_SPOKE_API_TOKEN = os.getenv("EA_SPOKE_API_TOKEN", "")
+
+# Therapist Auth
+THERAPIST_API_TOKEN = os.getenv("THERAPIST_API_TOKEN", "dev-therapist-token")
+
+# Admin Email (for schedule emails)
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "")

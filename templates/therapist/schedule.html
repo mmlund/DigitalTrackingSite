@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomorrow's Schedule | Day Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface-hover: #22252f;
+            --border: #2a2d3a;
+            --text: #e8eaed;
+            --text-muted: #8b8fa3;
+            --accent: #6c5ce7;
+            --accent-glow: rgba(108, 92, 231, 0.15);
+            --green: #00b894;
+            --red: #fd7272;
+            --yellow: #fdcb6e;
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .date-picker {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .date-picker input[type="date"] {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .date-picker input[type="date"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        .nav-links a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: var(--accent-glow);
+            color: var(--accent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        td {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: var(--surface-hover);
+        }
+
+        .paid-yes {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .paid-no {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .site-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(108, 92, 231, 0.12);
+            color: #a29bfe;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .summary-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.5rem;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+
+            .summary-bar {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            th,
+            td {
+                padding: 0.6rem 0.75rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Day Sheet</h1>
+                <p class="subtitle">Tomorrow's schedule across all sites</p>
+            </div>
+            <div class="date-picker">
+                <input type="date" id="dateInput" />
+            </div>
+        </header>
+
+        <nav class="nav-links">
+            <a href="/api/therapist/schedule-view" class="active">Schedule</a>
+            <a href="/api/therapist/ratings-view">Ratings</a>
+        </nav>
+
+        <div class="summary-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">-</div>
+                <div class="stat-label">Appointments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="paidCount">-</div>
+                <div class="stat-label">Paid</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="unpaidCount">-</div>
+                <div class="stat-label">Unpaid</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Appointments</h2>
+                <span class="badge" id="dateBadge"></span>
+            </div>
+            <div id="tableContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading schedule…</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_TOKEN = 'dev-therapist-token';  // TODO: replace with env/config
+        const dateInput = document.getElementById('dateInput');
+
+        // Default to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.value = tomorrow.toISOString().split('T')[0];
+
+        dateInput.addEventListener('change', () => fetchSchedule(dateInput.value));
+
+        async function fetchSchedule(date) {
+            const container = document.getElementById('tableContainer');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading schedule…</p></div>';
+
+            try {
+                const resp = await fetch(`/api/therapist/schedule?date=${date}`, {
+                    headers: { 'X-Therapist-Token': API_TOKEN }
+                });
+                const data = await resp.json();
+
+                if (!data.success || !data.appointments.length) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <p>No appointments for ${date}</p>
+                        </div>`;
+                    document.getElementById('totalCount').textContent = '0';
+                    document.getElementById('paidCount').textContent = '0';
+                    document.getElementById('unpaidCount').textContent = '0';
+                    document.getElementById('dateBadge').textContent = date;
+                    return;
+                }
+
+                const appts = data.appointments;
+                const paid = appts.filter(a => a.paid === 'Yes').length;
+
+                document.getElementById('totalCount').textContent = appts.length;
+                document.getElementById('paidCount').textContent = paid;
+                document.getElementById('unpaidCount').textContent = appts.length - paid;
+                document.getElementById('dateBadge').textContent = date;
+
+                let html = `<table>
+                    <thead><tr>
+                        <th>Date</th><th>Time</th><th>Name</th><th>Paid</th><th>Site</th>
+                    </tr></thead><tbody>`;
+
+                for (const a of appts) {
+                    html += `<tr>
+                        <td>${a.date}</td>
+                        <td>${a.time}</td>
+                        <td>${a.name}</td>
+                        <td class="${a.paid === 'Yes' ? 'paid-yes' : 'paid-no'}">${a.paid}</td>
+                        <td><span class="site-badge">${a.site}</span></td>
+                    </tr>`;
+                }
+
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            } catch (err) {
+                container.innerHTML = `<div class="empty-state"><p>Error loading schedule: ${err.message}</p></div>`;
+            }
+        }
+
+        // Initial fetch
+        fetchSchedule(dateInput.value);
+    </script>
+</body>
+
+</html>

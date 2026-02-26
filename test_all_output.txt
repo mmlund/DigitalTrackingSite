@@ -1,0 +1,396 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\mmlun\Antigravity\DigitalTrackingSite
+plugins: anyio-4.11.0
+collecting ... collected 162 items
+
+tests/test_analysis.py::TestAnalysis::test_ask_data PASSED               [  0%]
+tests/test_app.py::TestApp::test_dashboard PASSED                        [  1%]
+tests/test_app.py::TestApp::test_generate_api PASSED                     [  1%]
+tests/test_app.py::TestApp::test_index PASSED                            [  2%]
+tests/test_app.py::TestApp::test_track_missing_params PASSED             [  3%]
+tests/test_app.py::TestApp::test_track_valid PASSED                      [  3%]
+tests/test_auto_dates.py::TestAutoDateUpdates::test_atomic_min_max_update PASSED [  4%]
+tests/test_auto_dates.py::TestAutoDateUpdates::test_empty_slug_is_noop PASSED [  4%]
+tests/test_auto_dates.py::TestAutoDateUpdates::test_no_matching_campaign_is_silent PASSED [  5%]
+tests/test_auto_dates.py::TestAutoDateUpdates::test_none_slug_is_noop PASSED [  6%]
+tests/test_auto_dates.py::TestAutoDateHookInTracking::test_hook_called_when_utm_campaign_present PASSED [  6%]
+tests/test_auto_dates.py::TestAutoDateHookInTracking::test_hook_not_called_without_campaign PASSED [  7%]
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_campaign_not_found PASSED [  8%]
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_inherits_base_utms PASSED [  8%]
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_missing_landing_page PASSED [  9%]
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_with_content_and_term PASSED [  9%]
+tests/test_campaign_links.py::TestCampaignLinks::test_generated_url_uses_landing_page PASSED [ 10%]
+tests/test_campaign_links.py::TestCampaignLinks::test_list_campaign_links PASSED [ 11%]
+tests/test_campaign_spend.py::TestCampaignSpend::test_list_spend_sorted PASSED [ 11%]
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_campaign_not_found PASSED [ 12%]
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_new PASSED [ 12%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_invalid_channel PASSED [ 13%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_invalid_site PASSED [ 14%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_missing_name PASSED [ 14%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_missing_utm_source PASSED [ 15%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_success PASSED [ 16%]
+tests/test_campaigns.py::TestCampaignCRUD::test_create_campaign_with_notes PASSED [ 16%]
+tests/test_campaigns.py::TestCampaignCRUD::test_duplicate_campaign PASSED [ 17%]
+tests/test_campaigns.py::TestCampaignCRUD::test_get_campaign PASSED      [ 17%]
+tests/test_campaigns.py::TestCampaignCRUD::test_get_campaign_not_found PASSED [ 18%]
+tests/test_campaigns.py::TestCampaignCRUD::test_list_campaigns_with_status_sort PASSED [ 19%]
+tests/test_campaigns.py::TestCampaignCRUD::test_set_campaign_status PASSED [ 19%]
+tests/test_campaigns.py::TestCampaignCRUD::test_set_campaign_status_invalid PASSED [ 20%]
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_locked_fields PASSED [ 20%]
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_unlocked_fields PASSED [ 21%]
+tests/test_campaigns.py::TestCampaignCRUD::test_update_campaign_notes PASSED [ 22%]
+tests/test_campaigns.py::TestCampaignConversionEvents::test_invalid_conversion_event_rejected PASSED [ 22%]
+tests/test_campaigns.py::TestCampaignConversionEvents::test_valid_conversion_events PASSED [ 23%]
+tests/test_cancellation.py::TestDedupeKey::test_different_appointment_different_key PASSED [ 24%]
+tests/test_cancellation.py::TestDedupeKey::test_different_time_different_key PASSED [ 24%]
+tests/test_cancellation.py::TestDedupeKey::test_no_appointment_id_returns_none PASSED [ 25%]
+tests/test_cancellation.py::TestDedupeKey::test_same_inputs_same_key PASSED [ 25%]
+tests/test_cancellation.py::TestDedupeKey::test_string_timestamp PASSED  [ 26%]
+tests/test_cancellation.py::TestClassification::test_cancel_after_appointment PASSED [ 27%]
+tests/test_cancellation.py::TestClassification::test_early_cancel PASSED [ 27%]
+tests/test_cancellation.py::TestClassification::test_exactly_24_hours PASSED [ 28%]
+tests/test_cancellation.py::TestClassification::test_late_cancel PASSED  [ 29%]
+tests/test_cancellation.py::TestClassification::test_missing_values PASSED [ 29%]
+tests/test_cancellation.py::TestClassification::test_string_datetimes PASSED [ 30%]
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_case_insensitive PASSED [ 30%]
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_missing PASSED [ 31%]
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_validation PASSED [ 32%]
+tests/test_cancellation.py::TestEnrichment::test_enrichment_attaches_fields PASSED [ 32%]
+tests/test_cancellation.py::TestAppointmentFieldPromotion::test_appointment_id_from_booking_id PASSED [ 33%]
+tests/test_cancellation.py::TestAppointmentFieldPromotion::test_appointment_id_from_transaction_id PASSED [ 33%]
+tests/test_cancellation.py::TestAppointmentFieldPromotion::test_appointment_id_promoted PASSED [ 34%]
+tests/test_cancellation.py::TestCancellationDedupe::test_duplicate_cancellation_skipped PASSED [ 35%]
+tests/test_cancellation.py::TestCancellationEnrichmentE2E::test_cancellation_has_classification PASSED [ 35%]
+tests/test_envelope.py::TestEnvelopeFields::test_event_type_defaults_to_unknown PASSED [ 36%]
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_falls_back_to_server_time PASSED [ 37%]
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_from_raw_params_timestamp PASSED [ 37%]
+tests/test_envelope.py::TestEnvelopeFields::test_raw_params_preserved PASSED [ 38%]
+tests/test_envelope.py::TestEnvelopeFields::test_schema_version_present PASSED [ 38%]
+tests/test_envelope.py::TestEnvelopeFields::test_site_id_defaults_to_unknown PASSED [ 39%]
+tests/test_envelope.py::TestEnvelopeFields::test_site_id_inferred_from_host PASSED [ 40%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_defaults_to_web PASSED [ 40%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_from_booking_host PASSED [ 41%]
+tests/test_envelope.py::TestEnvelopeFields::test_source_system_from_utm PASSED [ 41%]
+tests/test_envelope.py::TestEnvelopeFields::test_utm_object_empty_strings_become_none PASSED [ 42%]
+tests/test_envelope.py::TestEnvelopeFields::test_utm_object_populated PASSED [ 43%]
+tests/test_envelope.py::TestEnvelopeFields::test_visitor_id_from_device_id PASSED [ 43%]
+tests/test_identity.py::TestHashing::test_hash_deterministic PASSED      [ 44%]
+tests/test_identity.py::TestHashing::test_hash_email_normalization PASSED [ 45%]
+tests/test_identity.py::TestHashing::test_hash_email_preferred_over_phone PASSED [ 45%]
+tests/test_identity.py::TestHashing::test_hash_invalid_email PASSED      [ 46%]
+tests/test_identity.py::TestHashing::test_hash_no_input PASSED           [ 46%]
+tests/test_identity.py::TestHashing::test_hash_phone_normalization PASSED [ 47%]
+tests/test_identity.py::TestHashing::test_hash_phone_only PASSED         [ 48%]
+tests/test_identity.py::TestHashing::test_hash_short_phone PASSED        [ 48%]
+tests/test_identity.py::TestIdentityResolution::test_identity_link_created PASSED [ 49%]
+tests/test_identity.py::TestIdentityResolution::test_resolve_adds_source_system PASSED [ 50%]
+tests/test_identity.py::TestIdentityResolution::test_resolve_creates_new_person PASSED [ 50%]
+tests/test_identity.py::TestIdentityResolution::test_resolve_null_hash PASSED [ 51%]
+tests/test_identity.py::TestIdentityResolution::test_resolve_returns_existing_person PASSED [ 51%]
+tests/test_identity.py::TestIdentityResolution::test_resolve_updates_last_seen PASSED [ 52%]
+tests/test_identity.py::TestPIIStripping::test_pii_stripped_from_event PASSED [ 53%]
+tests/test_identity.py::TestPIIStripping::test_pii_stripped_from_raw_params PASSED [ 53%]
+tests/test_identity.py::TestPIIStripping::test_strip_handles_missing_raw_params PASSED [ 54%]
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types PASSED [ 54%]
+tests/test_identity.py::TestProcessIdentity::test_identity_event_gets_person_id PASSED [ 55%]
+tests/test_identity.py::TestProcessIdentity::test_identity_event_without_email PASSED [ 56%]
+tests/test_identity.py::TestProcessIdentity::test_non_identity_event_unchanged PASSED [ 56%]
+tests/test_identity.py::TestProcessIdentity::test_repeat_patient_same_person_id PASSED [ 57%]
+tests/test_identity.py::TestIdentityEndToEnd::test_booking_confirmed_via_track PASSED [ 58%]
+tests/test_identity.py::TestIdentityEndToEnd::test_page_view_no_identity_processing PASSED [ 58%]
+tests/test_identity.py::TestIdentityEndToEnd::test_two_bookings_same_email_same_person PASSED [ 59%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_channel_conversion_rate PASSED [ 59%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings PASSED [ 60%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_revenue_summed_from_purchases PASSED [ 61%]
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_site_separation PASSED [ 61%]
+tests/test_ratings.py::TestRatingsValidation::test_invalid_score_range PASSED [ 62%]
+tests/test_ratings.py::TestRatingsValidation::test_missing_appointment_id PASSED [ 62%]
+tests/test_ratings.py::TestRatingsValidation::test_missing_site_id PASSED [ 63%]
+tests/test_ratings.py::TestRatingsValidation::test_non_noshow_scores_required PASSED [ 64%]
+tests/test_ratings.py::TestRatingsValidation::test_noshow_scores_optional PASSED [ 64%]
+tests/test_ratings.py::TestRatingsValidation::test_valid_non_noshow PASSED [ 65%]
+tests/test_ratings.py::TestRatingsValidation::test_zero_score_invalid PASSED [ 66%]
+tests/test_ratings.py::TestRatingsService::test_completion_status_complete PASSED [ 66%]
+tests/test_ratings.py::TestRatingsService::test_completion_status_incomplete PASSED [ 67%]
+tests/test_ratings.py::TestRatingsService::test_event_schema PASSED      [ 67%]
+tests/test_ratings.py::TestRatingsService::test_events_emitted PASSED    [ 68%]
+tests/test_ratings.py::TestRatingsService::test_get_day_ratings PASSED   [ 69%]
+tests/test_ratings.py::TestRatingsService::test_save_multiple_ratings PASSED [ 69%]
+tests/test_ratings.py::TestRatingsService::test_save_noshow_rating PASSED [ 70%]
+tests/test_ratings.py::TestRatingsService::test_save_single_rating PASSED [ 70%]
+tests/test_ratings.py::TestRatingsService::test_save_with_validation_error PASSED [ 71%]
+tests/test_ratings.py::TestRatingsService::test_upsert_preserves_history PASSED [ 72%]
+tests/test_ratings.py::TestEAProxy::test_combined_appointments PASSED    [ 72%]
+tests/test_ratings.py::TestEAProxy::test_no_sites_configured PASSED      [ 73%]
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint PASSED [ 74%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_day_get PASSED     [ 74%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_status PASSED      [ 75%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_submit_requires_date PASSED [ 75%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_submit_requires_ratings PASSED [ 76%]
+tests/test_ratings.py::TestTherapistAPI::test_schedule_requires_auth PASSED [ 77%]
+tests/test_ratings.py::TestTherapistAPI::test_schedule_with_auth PASSED  [ 77%]
+tests/test_ratings.py::TestScheduleService::test_build_reminder_body SKIPPED [ 78%]
+tests/test_ratings.py::TestScheduleService::test_build_schedule_html_empty SKIPPED [ 79%]
+tests/test_ratings.py::TestScheduleService::test_build_schedule_html_with_data SKIPPED [ 79%]
+tests/test_reports.py::TestOverviewReport::test_overview_kpi_tiles_present PASSED [ 80%]
+tests/test_reports.py::TestOverviewReport::test_overview_new_visitor_revenue PASSED [ 80%]
+tests/test_reports.py::TestOverviewReport::test_overview_new_visitors_labelled_estimated PASSED [ 81%]
+tests/test_reports.py::TestOverviewReport::test_overview_returns_200 PASSED [ 82%]
+tests/test_reports.py::TestOverviewReport::test_overview_revenue_is_raw PASSED [ 82%]
+tests/test_reports.py::TestOverviewReport::test_overview_schema_version_and_meta PASSED [ 83%]
+tests/test_reports.py::TestOverviewReport::test_overview_spend_from_campaigns PASSED [ 83%]
+tests/test_reports.py::TestOverviewReport::test_overview_weekly_series_structure PASSED [ 84%]
+tests/test_reports.py::TestFunnelReport::test_funnel_all_scope PASSED    [ 85%]
+tests/test_reports.py::TestFunnelReport::test_funnel_booking_confirmed_count PASSED [ 85%]
+tests/test_reports.py::TestFunnelReport::test_funnel_economics PASSED    [ 86%]
+tests/test_reports.py::TestFunnelReport::test_funnel_sessions_total PASSED [ 87%]
+tests/test_reports.py::TestFunnelReport::test_funnel_stubs_present PASSED [ 87%]
+tests/test_reports.py::TestFunnelReport::test_funnels_active_only_filter PASSED [ 88%]
+tests/test_reports.py::TestFunnelReport::test_funnels_returns_200 PASSED [ 88%]
+tests/test_reports.py::TestValueReport::test_value_loss_analysis_has_trigger_event PASSED [ 89%]
+tests/test_reports.py::TestValueReport::test_value_loss_session_detected PASSED [ 90%]
+tests/test_reports.py::TestValueReport::test_value_low_rating_detected PASSED [ 90%]
+tests/test_reports.py::TestValueReport::test_value_ltv_phase_gated PASSED [ 91%]
+tests/test_reports.py::TestValueReport::test_value_new_vs_repeat_revenue PASSED [ 91%]
+tests/test_reports.py::TestValueReport::test_value_ratings_trends PASSED [ 92%]
+tests/test_reports.py::TestValueReport::test_value_returns_200 PASSED    [ 93%]
+tests/test_reports.py::TestValueReport::test_value_touchpoints PASSED    [ 93%]
+tests/test_reports.py::TestCampaignPacket::test_packet_funnel_counts PASSED [ 94%]
+tests/test_reports.py::TestCampaignPacket::test_packet_includes_plan_snapshot PASSED [ 95%]
+tests/test_reports.py::TestCampaignPacket::test_packet_loss_trigger_event PASSED [ 95%]
+tests/test_reports.py::TestCampaignPacket::test_packet_no_pii_in_paths PASSED [ 96%]
+tests/test_reports.py::TestCampaignPacket::test_packet_not_found PASSED  [ 96%]
+tests/test_reports.py::TestCampaignPacket::test_packet_quality_metrics PASSED [ 97%]
+tests/test_reports.py::TestCampaignPacket::test_packet_returns_200 PASSED [ 98%]
+tests/test_reports.py::TestCampaignPacket::test_packet_sessions_total PASSED [ 98%]
+tests/test_reports.py::TestCampaignPacket::test_packet_weekly_series PASSED [ 99%]
+tests/test_tracking_json.py::TestTrackingJSON::test_track_json_payload PASSED [100%]
+
+============================== warnings summary ===============================
+tests/test_analysis.py::TestAnalysis::test_ask_data
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\blueprints\analysis\__init__.py:21: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    end_date = datetime.utcnow()
+
+tests/test_auto_dates.py: 2 warnings
+tests/test_campaign_links.py: 3 warnings
+tests/test_campaign_spend.py: 1 warning
+tests/test_campaigns.py: 12 warnings
+tests/test_envelope.py: 4 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\campaign_service.py:44: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow()
+
+tests/test_auto_dates.py::TestAutoDateUpdates::test_empty_slug_is_noop
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_auto_dates.py:54: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    update_campaign_dates_from_event("", datetime.utcnow())
+
+tests/test_auto_dates.py::TestAutoDateUpdates::test_no_matching_campaign_is_silent
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_auto_dates.py:67: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    update_campaign_dates_from_event("nonexistent_slug", datetime.utcnow())
+
+tests/test_auto_dates.py::TestAutoDateUpdates::test_none_slug_is_noop
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_auto_dates.py:59: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    update_campaign_dates_from_event(None, datetime.utcnow())
+
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_campaign_not_found
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_inherits_base_utms
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_missing_landing_page
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_with_content_and_term
+tests/test_campaign_links.py::TestCampaignLinks::test_generated_url_uses_landing_page
+tests/test_campaign_links.py::TestCampaignLinks::test_list_campaign_links
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaign_links.py:35: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(),
+
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_campaign_not_found
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_inherits_base_utms
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_missing_landing_page
+tests/test_campaign_links.py::TestCampaignLinks::test_generate_link_with_content_and_term
+tests/test_campaign_links.py::TestCampaignLinks::test_generated_url_uses_landing_page
+tests/test_campaign_links.py::TestCampaignLinks::test_list_campaign_links
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaign_links.py:36: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "updated_at": datetime.utcnow(),
+
+tests/test_campaign_links.py::TestCampaignLinks::test_list_campaign_links
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaign_links.py:109: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow()},
+
+tests/test_campaign_spend.py::TestCampaignSpend::test_list_spend_sorted
+tests/test_campaign_spend.py::TestCampaignSpend::test_list_spend_sorted
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_campaign_not_found
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_campaign_not_found
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_new
+tests/test_campaign_spend.py::TestCampaignSpend::test_upsert_spend_new
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaign_spend.py:24: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_campaigns.py::TestCampaignCRUD::test_duplicate_campaign
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:178: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_campaigns.py::TestCampaignCRUD::test_get_campaign
+tests/test_campaigns.py::TestCampaignCRUD::test_get_campaign
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:82: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_campaigns.py::TestCampaignCRUD::test_list_campaigns_with_status_sort
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:96: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_campaigns.py::TestCampaignCRUD::test_set_campaign_status
+tests/test_campaigns.py::TestCampaignCRUD::test_set_campaign_status
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:166: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_locked_fields
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_locked_fields
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:127: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_unlocked_fields
+tests/test_campaigns.py::TestCampaignCRUD::test_update_active_campaign_unlocked_fields
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:151: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_campaigns.py::TestCampaignCRUD::test_update_campaign_notes
+tests/test_campaigns.py::TestCampaignCRUD::test_update_campaign_notes
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_campaigns.py:113: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow(), "updated_at": datetime.utcnow(),
+
+tests/test_cancellation.py::TestDedupeKey::test_no_appointment_id_returns_none
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:49: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.assertIsNone(compute_dedupe_key("ea", None, datetime.utcnow()))
+
+tests/test_cancellation.py::TestDedupeKey::test_no_appointment_id_returns_none
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:50: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.assertIsNone(compute_dedupe_key("ea", "", datetime.utcnow()))
+
+tests/test_cancellation.py::TestClassification::test_missing_values
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:97: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cls, hours = classify_cancellation(None, datetime.utcnow())
+
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_case_insensitive
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:147: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_missing
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:136: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_cancellation.py::TestEnrichment::test_cancelled_by_validation
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_cancellation.py:126: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_cancellation.py: 6 warnings
+tests/test_envelope.py: 13 warnings
+tests/test_identity.py: 4 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:85: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_cancellation.py: 4 warnings
+tests/test_envelope.py: 12 warnings
+tests/test_identity.py: 4 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:135: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow()
+
+tests/test_cancellation.py: 6 warnings
+tests/test_envelope.py: 13 warnings
+tests/test_identity.py: 4 warnings
+tests/test_tracking_json.py: 1 warning
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\track_handler.py:281: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    server_received_at = datetime.utcnow()
+
+tests/test_cancellation.py: 4 warnings
+tests/test_identity.py: 19 warnings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\identity_service.py:106: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow()
+
+tests/test_envelope.py::TestEnvelopeFields::test_occurred_at_falls_back_to_server_time
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_envelope.py:65: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    diff = (datetime.utcnow() - event["occurred_at"]).total_seconds()
+
+tests/test_identity.py::TestIdentityResolution::test_identity_link_created
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:137: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    resolve_person_id(h, datetime.utcnow(), "scandinavian", "booking_confirmed")
+
+tests/test_identity.py::TestIdentityResolution::test_identity_link_created
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:138: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    resolve_person_id(h, datetime.utcnow(), "scandinavian", "attended")
+
+tests/test_identity.py::TestIdentityResolution::test_resolve_adds_source_system
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:153: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    resolve_person_id(h, datetime.utcnow(), source_system="easyappointments_scandinavian")
+
+tests/test_identity.py::TestIdentityResolution::test_resolve_creates_new_person
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:110: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    pid = resolve_person_id(h, datetime.utcnow(), "scandinavian", "booking_confirmed")
+
+tests/test_identity.py::TestIdentityResolution::test_resolve_null_hash
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:147: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    pid = resolve_person_id(None, datetime.utcnow())
+
+tests/test_identity.py::TestIdentityResolution::test_resolve_returns_existing_person
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:120: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    pid1 = resolve_person_id(h, datetime.utcnow(), "scandinavian", "booking_confirmed")
+
+tests/test_identity.py::TestIdentityResolution::test_resolve_returns_existing_person
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:121: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    pid2 = resolve_person_id(h, datetime.utcnow(), "scandinavian", "attended")
+
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types
+tests/test_identity.py::TestProcessIdentity::test_all_identity_event_types
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:292: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_identity.py::TestProcessIdentity::test_identity_event_gets_person_id
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:226: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_identity.py::TestProcessIdentity::test_identity_event_without_email
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:261: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_identity.py::TestProcessIdentity::test_repeat_patient_same_person_id
+tests/test_identity.py::TestProcessIdentity::test_repeat_patient_same_person_id
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_identity.py:276: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "occurred_at": datetime.utcnow(),
+
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_channel_conversion_rate
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_revenue_summed_from_purchases
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_site_separation
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\analysis\llm_preprocessor.py:19: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    start = datetime.utcnow() - timedelta(days=days)
+
+tests/test_llm_preprocessor.py::TestLLMPreprocessor::test_by_site_counts_bookings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_llm_preprocessor.py:20: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_ratings.py: 10 warnings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\ratings_service.py:70: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\modules\therapist\routes.py:240: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "date": data.get("date", datetime.utcnow().strftime("%Y-%m-%d")),
+
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\modules\therapist\routes.py:241: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow()
+
+tests/test_reports.py: 32 warnings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\test_reports.py:29: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.now = datetime.utcnow()
+
+tests/test_reports.py: 151 warnings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\src\report_service.py:47: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================ 159 passed, 3 skipped, 373 warnings in 3.65s =================

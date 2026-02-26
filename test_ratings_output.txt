@@ -1,0 +1,52 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- C:\Python314\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\mmlun\Antigravity\DigitalTrackingSite
+plugins: anyio-4.11.0
+collecting ... collected 29 items
+
+tests/test_ratings.py::TestRatingsValidation::test_invalid_score_range PASSED [  3%]
+tests/test_ratings.py::TestRatingsValidation::test_missing_appointment_id PASSED [  6%]
+tests/test_ratings.py::TestRatingsValidation::test_missing_site_id PASSED [ 10%]
+tests/test_ratings.py::TestRatingsValidation::test_non_noshow_scores_required PASSED [ 13%]
+tests/test_ratings.py::TestRatingsValidation::test_noshow_scores_optional PASSED [ 17%]
+tests/test_ratings.py::TestRatingsValidation::test_valid_non_noshow PASSED [ 20%]
+tests/test_ratings.py::TestRatingsValidation::test_zero_score_invalid PASSED [ 24%]
+tests/test_ratings.py::TestRatingsService::test_completion_status_complete PASSED [ 27%]
+tests/test_ratings.py::TestRatingsService::test_completion_status_incomplete PASSED [ 31%]
+tests/test_ratings.py::TestRatingsService::test_event_schema PASSED      [ 34%]
+tests/test_ratings.py::TestRatingsService::test_events_emitted PASSED    [ 37%]
+tests/test_ratings.py::TestRatingsService::test_get_day_ratings PASSED   [ 41%]
+tests/test_ratings.py::TestRatingsService::test_save_multiple_ratings PASSED [ 44%]
+tests/test_ratings.py::TestRatingsService::test_save_noshow_rating PASSED [ 48%]
+tests/test_ratings.py::TestRatingsService::test_save_single_rating PASSED [ 51%]
+tests/test_ratings.py::TestRatingsService::test_save_with_validation_error PASSED [ 55%]
+tests/test_ratings.py::TestRatingsService::test_upsert_preserves_history PASSED [ 58%]
+tests/test_ratings.py::TestEAProxy::test_combined_appointments PASSED    [ 62%]
+tests/test_ratings.py::TestEAProxy::test_no_sites_configured PASSED      [ 65%]
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint PASSED [ 68%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_day_get PASSED     [ 72%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_status PASSED      [ 75%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_submit_requires_date PASSED [ 79%]
+tests/test_ratings.py::TestTherapistAPI::test_ratings_submit_requires_ratings PASSED [ 82%]
+tests/test_ratings.py::TestTherapistAPI::test_schedule_requires_auth PASSED [ 86%]
+tests/test_ratings.py::TestTherapistAPI::test_schedule_with_auth PASSED  [ 89%]
+tests/test_ratings.py::TestScheduleService::test_build_reminder_body SKIPPED [ 93%]
+tests/test_ratings.py::TestScheduleService::test_build_schedule_html_empty SKIPPED [ 96%]
+tests/test_ratings.py::TestScheduleService::test_build_schedule_html_with_data SKIPPED [100%]
+
+============================== warnings summary ===============================
+tests/test_ratings.py: 10 warnings
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\..\src\ratings_service.py:70: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\..\src\modules\therapist\routes.py:240: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "date": data.get("date", datetime.utcnow().strftime("%Y-%m-%d")),
+
+tests/test_ratings.py::TestTherapistAPI::test_legacy_rating_endpoint
+  C:\Users\mmlun\Antigravity\DigitalTrackingSite\tests\..\src\modules\therapist\routes.py:241: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "created_at": datetime.utcnow()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 26 passed, 3 skipped, 12 warnings in 1.89s ==================
